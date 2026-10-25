@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Notes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="quicknotes_styles.css">
+</head>
+<body>
+
+  <div class="app">
+
+    <div class="section-label">Заголовок</div>
+    <input id="note-title" type="text" placeholder="Название заметки…" maxlength="80" />
+
+    <div class="section-label" style="margin-top: 12px;">Содержимое</div>
+    <textarea id="note-content" placeholder="Текст заметки…"></textarea>
+
+    <div class="color-row">
+      <span class="section-label" style="margin: 0;">Цвет</span>
+      <div class="color-options">
+        <label class="color-opt" title="Жёлтый">
+          <input type="radio" name="color" value="yellow" checked>
+          <span class="color-swatch" style="background:#fef08a;"></span>
+        </label>
+        <label class="color-opt" title="Оранжевый">
+          <input type="radio" name="color" value="amber">
+          <span class="color-swatch" style="background:#fed7aa;"></span>
+        </label>
+        <label class="color-opt" title="Зелёный">
+          <input type="radio" name="color" value="green">
+          <span class="color-swatch" style="background:#bbf7d0;"></span>
+        </label>
+        <label class="color-opt" title="Синий">
+          <input type="radio" name="color" value="blue">
+          <span class="color-swatch" style="background:#bae6fd;"></span>
+        </label>
+        <label class="color-opt" title="Розовый">
+          <input type="radio" name="color" value="pink">
+          <span class="color-swatch" style="background:#fbcfe8;"></span>
+        </label>
+        <label class="color-opt" title="Лавандовый">
+          <input type="radio" name="color" value="purple">
+          <span class="color-swatch" style="background:#ddd6fe;"></span>
+        </label>
+      </div>
+    </div>
+
+    <button id="create-btn">📌 Создать заметку</button>
+
+    <div id="toast" class="toast"></div>
+
+  </div>
+
+  <script src="quicknotes_scripts.js"></script>
+</body>
+</html>

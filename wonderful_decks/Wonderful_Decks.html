@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wonderful Decks</title>
+    <link class="styles" rel="stylesheet" href="wonderful_decks_styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>🔮 Wonderful Decks</h1>
+            </header>
+
+        <section class="controls">
+            <div class="control-group deck-group">
+                <label for="deck-select">Выберите колоду:</label>
+                <select id="deck-select">
+                    <option value="miscellany">Колода всякой всячины (Deck of Miscellany)</option>
+                    <option value="illusions">Колода иллюзий (Deck of illusions)</option>
+                    <option value="wild">Колода диких карт (Deck of Wild Cards)</option>
+                    <option value="many_things">Колода многих вещей (Deck of Many Things)</option>
+                    <option value="many_more">Колода ещё больших вещей (Deck of Many More Things)</option>
+                    <option value="wonder">Колода чудес (Deck of Wonder)</option>
+                </select>
+            </div>
+
+            <div class="control-group count-group">
+                <label for="card-count">Кол-во:</label>
+                <input type="number" id="card-count" min="1" max="99" value="1" oninput="if(this.value.length > 2) this.value = this.value.slice(0, 2);">
+            </div>
+
+            <div class="button-group">
+                <button id="draw-btn" class="btn primary-btn">Вытянуть</button>
+                <button id="reset-btn" class="btn secondary-btn">Перетасовать</button>
+            </div>
+        </section>
+
+        <section class="status-panel">
+            <span id="deck-info">Осталось карт в колоде: --</span>
+        </section>
+
+        <main id="cards-display" class="cards-grid">
+            </main>
+    </div>
+    <script src="wonderful_decks_scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+@import url('../desktop_theme.css');
+:root {
+  --bg:         #0a0b0d;
+  --panel:      #12141a;
+  --surface:    #1c1f28;
+  --border:     #2a2e3a;
+  --accent:     #c0392b;
+  --gold:       #c9a84c;
+  --text:       #d4c9b0;
+  --text-dim:   #ffffff;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Cormorant Garamond', serif; font-size: 1.05em;
+  padding: 8px; overflow-x: hidden; user-select: none;
+}
+
+.app-container {
+  max-width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 8px;
+}
+
+.panel {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 5px; padding: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+}
+
+/* Header Config Panel Grid */
+.input-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr) 70px 100px 110px; gap: 8px; align-items: center;
+}
+
+.field-box { display: flex; flex-direction: column; gap: 2px; }
+
+label { font-family: 'Cinzel', serif; font-size: 0.7em; color: var(--text-dim); letter-spacing: 0.5px; }
+
+input[type="text"], input[type="number"], select {
+  background: var(--surface); border: 1px solid var(--border); color: #fff;
+  padding: 4px 8px; border-radius: 4px; font-family: inherit; font-size: 0.95em; outline: none;
+}
+input:focus, select:focus { border-color: var(--gold); }
+
+.compact-lvl input { text-align: center; }
+
+.mini-badge {
+  display: flex; flex-direction: column; align-items: center;
+  background: var(--surface); padding: 3px 6px; border-radius: 4px; border: 1px solid rgba(201,168,76,0.2);
+}
+.derived-val { font-family: 'Cinzel', serif; font-size: 1.1em; font-weight: bold; color: var(--gold); }
+
+/* Main Attribute/Skill Matrix Section */
+.scores-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+}
+
+.ability-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 8px; }
+
+.ability-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 4px; margin-bottom: 6px; }
+.ability-title { font-family: 'Cinzel', serif; font-size: 0.8em; font-weight: 600; color: var(--gold); }
+.ability-score { width: 48px; text-align: center; font-weight: bold; padding: 2px 4px; }
+.ability-mod { font-family: 'Cinzel', serif; font-weight: bold; font-size: 1.05em; color: #fff; background: var(--bg); padding: 1px 6px; border-radius: 3px; border: 1px solid var(--border); min-width: 38px; text-align: center; }
+
+.skills-list { display: flex; flex-direction: column; gap: 3px; max-height: 125px; overflow-y: auto; padding-right: 2px; }
+.skills-list::-webkit-scrollbar { width: 3px; }
+.skills-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.skill-row { display: flex; align-items: center; gap: 6px; font-size: 0.9em; color: var(--text-dim); text-overflow: ellipsis; white-space: nowrap; }
+.skill-row .val { font-family: 'Cinzel', serif; font-size: 0.85em; font-weight: bold; color: #fff; min-width: 24px; text-align: right; margin-right: 2px; }
+
+/* Tri-State Custom Proficiency Indicator Mark */
+.prof-dot {
+  width: 12px; height: 12px; border: 1px solid var(--border); border-radius: 50%;
+  display: inline-block; cursor: pointer; position: relative; background: rgba(0,0,0,0.3); transition: all 0.15s ease; flex-shrink: 0;
+}
+.prof-dot[data-state="1"] { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 4px rgba(201,168,76,0.4); }
+.prof-dot[data-state="2"] { background: var(--accent); border-color: var(--gold); box-shadow: 0 0 6px var(--accent); }
+
+/* Bottom Magic Panel Layout */
+.magic-layout { display: flex; gap: 15px; align-items: center; justify-content: space-between; }
+.magic-box { display: flex; flex-direction: column; gap: 2px; }
+.magic-box select { font-family: 'Cinzel', serif; font-size: 0.75em; height: 30px; cursor: pointer; }
+.block-val { background: var(--surface); border: 1px solid var(--border); padding: 2px 12px; border-radius: 4px; text-align: center; min-width: 85px; }
+.m-val { font-family: 'Cinzel', serif; font-size: 1.15em; font-weight: bold; color: var(--gold); }
+
+/* Общие стили для обеих кнопок */
+#btn-clear, #btn-create-card {
+  font-family: 'Cinzel', serif; font-size: 0.75em; letter-spacing: 1px;
+  background: var(--surface); border-radius: 4px; padding: 8px 16px; 
+  cursor: pointer; font-weight: bold; text-transform: uppercase; 
+  transition: all 0.15s ease;
+}
+
+/* Стили кнопки ОЧИСТИТЬ (с отступом слева для выравнивания блока вправо) */
+#btn-clear {
+  color: var(--accent); border: 1px solid rgba(192, 57, 43, 0.4); margin-left: auto;
+}
+#btn-clear:hover { background: rgba(192, 57, 43, 0.1); border-color: var(--accent); color: #fff; }
+#btn-clear:active { transform: translateY(1px); }
+
+/* Стили кнопки КАРТОЧКА ПЕРСОНАЖА */
+#btn-create-card {
+  color: var(--gold); border: 1px solid rgba(201, 168, 76, 0.4);
+}
+#btn-create-card:hover { background: rgba(201, 168, 76, 0.1); border-color: var(--gold); color: #fff; }
+#btn-create-card:active { transform: translateY(1px); }

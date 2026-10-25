@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конструктор Ловушек</title>
+    <link rel="stylesheet" href="traps_styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="title-row">
+            <h1>Конструктор Ловушек</h1>
+            <button class="book-btn" id="openBookBtn" title="Справочник ловушек">📖</button>
+        </div>
+
+        <div class="controls">
+            <div class="input-group full-width">
+                <label for="trapName">Название ловушки:</label>
+                <input type="text" id="trapName" placeholder="Например: Отравленные дротики" value="Скрытая ловушка">
+            </div>
+            <div class="input-group full-width">
+                <label for="trapTrigger">Триггер (условие срабатывания):</label>
+                <textarea id="trapTrigger" rows="2" placeholder="Нажимная плита, открытие двери..."></textarea>
+            </div>
+            <div class="input-group full-width">
+                <label for="trapEffect">Эффект и побочные действия:</label>
+                <textarea id="trapEffect" rows="2" placeholder="Вылетают дротики, комната заполняется газом..."></textarea>
+            </div>
+            <div class="control-group">
+                <label for="level">Уровень группы:</label>
+                <select id="level">
+                    <option value="1">1–4 уровни</option>
+                    <option value="2" selected>5–10 уровни</option>
+                    <option value="3">11–16 уровни</option>
+                    <option value="4">17–20 уровни</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="danger">Степень угрозы:</label>
+                <select id="danger">
+                    <option value="medium">Средняя (Неудобство)</option>
+                    <option value="dangerous" selected>Опасная</option>
+                    <option value="deadly">Смертельная</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="mechType">Механика срабатывания:</label>
+                <select id="mechType">
+                    <option value="attack">Бросок атаки</option>
+                    <option value="save" selected>Спасбросок</option>
+                </select>
+            </div>
+            <div class="control-group" id="saveAttrGroup">
+                <label for="saveAttr">Спасбросок (если выбран):</label>
+                <select id="saveAttr">
+                    <option value="Лвк">Ловкость</option>
+                    <option value="Тел">Телосложение</option>
+                    <option value="Мдр">Мудрость</option>
+                    <option value="Сил">Сила</option>
+                    <option value="Инт">Интеллект</option>
+                    <option value="Хар">Харизма</option>
+                </select>
+            </div>
+            <div class="control-group checkbox-group full-width">
+                <label>
+                    <input type="checkbox" id="isMagic">
+                    Это магическая ловушка (влияет на навыки обезвреживания)
+                </label>
+            </div>
+            <button id="generateBtn">Создать окно ловушки</button>
+        </div>
+    </div>
+
+    <!-- ── КНИЖКА-СПРАВОЧНИК ── -->
+    <div class="book-overlay hidden" id="bookOverlay">
+        <div class="book-panel">
+            <div class="book-header">
+                <span>📖 Справочник ловушек</span>
+                <button class="book-close" id="closeBookBtn">✕</button>
+            </div>
+            <div class="book-body">
+                <div class="trap-list" id="trapList">
+                    <!-- кнопки генерируются JS -->
+                </div>
+                <div class="trap-detail hidden" id="trapDetail">
+                    <button class="back-btn" id="backBtn">← Назад</button>
+                    <div id="trapDetailContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="traps_scripts.js"></script>
+</body>
+</html>

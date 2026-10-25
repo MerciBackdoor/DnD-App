@@ -1,0 +1,183 @@
+@import url('../desktop_theme.css');
+body {
+    background-color: #1a1a1f;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.campaign-container {
+    background-color: #24242b;
+    border: 3px solid #4a3c31;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    text-align: center;
+    width: 340px;
+}
+
+.calendar-header h1 {
+    font-size: 2.5rem;
+    margin: 0 0 5px 0;
+    color: #dfb15b;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.phase-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0 0 25px 0;
+    letter-spacing: 1px;
+    transition: color 0.5s ease;
+}
+
+.clock-frame {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 25px auto;
+    border: 8px solid #362d26;
+    outline: 3px solid #dfb15b;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+}
+
+.sky-bg {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: background 0.8s ease;
+}
+
+.stars-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px);
+    background-size: 40px 40px;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+.phase-midnight { background: linear-gradient(to bottom, #05050a, #0b0b1a); }
+.phase-midnight .stars-overlay { opacity: 0.6; }
+
+.phase-dawn { background: linear-gradient(to bottom, #ff7e5f, #feb47b); }
+.phase-morning { background: linear-gradient(to bottom, #7ec0ee, #ece7c4); }
+.phase-afternoon { background: linear-gradient(to bottom, #4a90e2, #9bd2f7); }
+.phase-dusk { background: linear-gradient(to bottom, #2c3e50, #fd746c); }
+.phase-night { background: linear-gradient(to bottom, #0f2027, #203a43); }
+.phase-night .stars-overlay { opacity: 0.3; }
+
+.celestial-disc {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sun, .moon {
+    position: absolute;
+    font-size: 2rem;
+    left: calc(50% - 1rem);
+}
+
+.sun { bottom: 15px; }
+.moon { top: 15px; }
+
+.horizon-mask {
+    position: absolute;
+    top: 0;
+    left: calc(50% - 2px);
+    width: 4px;
+    height: 12px;
+    background-color: #dfb15b;
+    border-radius: 0 0 2px 2px;
+}
+
+.digital-time {
+    font-size: 2.8rem;
+    font-family: monospace;
+    background-color: #17171c;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #3c3c46;
+    margin-bottom: 25px;
+    color: #00ffcc;
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+}
+
+.control-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.control-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+button {
+    flex: 1;
+    background-color: #3e3e4a;
+    border: 1px solid #555566;
+    color: #ffffff;
+    padding: 10px 5px;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+button:hover {
+    background-color: #4f4f5e;
+    border-color: #dfb15b;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+.btn-rest {
+    background-color: #2e4436;
+    border-color: #3e5c49;
+}
+.btn-rest:hover {
+    background-color: #3b5745;
+}
+
+.long-rest {
+    background-color: #2a3d4a;
+    border-color: #395366;
+}
+.long-rest:hover {
+    background-color: #354d5e;
+}
+
+.days button {
+    background-color: #2b2b2b;
+    font-size: 0.85rem;
+}
+/* ===== Единый стиль D&D Desktop ===== */
+body { background-color: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 1.05em; }
+.campaign-container { background-color: var(--panel); border: 1px solid var(--border); border-radius: 5px; box-shadow: 0 3px 10px rgba(0,0,0,.5); }
+.calendar-header h1 { font-family: var(--font-display); color: var(--gold); font-weight: 600; font-size: 2rem; }
+.phase-text { font-family: var(--font-display); }
+.clock-frame { border: 6px solid var(--surface); outline: 2px solid var(--gold); }
+.digital-time { font-family: var(--font-display); background-color: var(--bg); border: 1px solid var(--border); color: var(--gold); text-shadow: 0 0 10px rgba(201,168,76,.3); }
+button { font-family: var(--font-display); font-size: .75rem; letter-spacing: .5px; background-color: var(--surface); border: 1px solid var(--border); color: var(--text); }
+button:hover { background-color: var(--surface-hi); border-color: var(--gold); color: #fff; }
+.btn-rest, .long-rest, .days button { background-color: var(--surface); }
+.btn-rest { border-color: rgba(46,204,113,.35); }
+.long-rest { border-color: rgba(201,168,76,.35); }
+.btn-rest:hover, .long-rest:hover { background-color: var(--surface-hi); }

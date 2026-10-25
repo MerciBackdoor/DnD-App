@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор добычи D&D</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Marcellus&family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="small_loot_generator_styles.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <header>
+            <h1>Генератор добычи</h1>
+        </header>
+
+        <div class="control-panel">
+            <button id="generate-btn" disabled>Найти добычу</button>
+        </div>
+
+        <div id="loot-display" class="loot-card hidden">
+            <div class="card-accent-line"></div>
+            
+            <h2>Найдено в карманах:</h2>
+            
+            <div class="trinket-section">
+                <div id="trinket-text">Ожидание генерации...</div>
+            </div>
+            
+            <div class="coins-section">
+                <h3>Звонкая монета:</h3>
+                <div class="coins-container">
+                    <span id="coin-gp" class="coin gp hidden"><span class="coin-icon"></span><span class="coin-count">0</span>зм</span>
+                    <span id="coin-sp" class="coin sp hidden"><span class="coin-icon"></span><span class="coin-count">0</span>см</span>
+                    <span id="coin-cp" class="coin cp hidden"><span class="coin-icon"></span><span class="coin-count">0</span>мм</span>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="small_loot_generator_scripts.js"></script>
+
+</body>
+</html>

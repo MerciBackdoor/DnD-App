@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Просмотрщик картинок</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="image_viewer_styles.css">
+</head>
+<body>
+
+  <input type="file" id="image-upload" class="hidden-input" accept="image/png, image/jpeg, image/jpg" multiple onchange="handleImagesSelect(event)">
+
+  <div id="toolbar">
+    <div class="actions-left">
+      <button id="upload-btn" onclick="triggerNavUpload()">📁 Добавить фото</button>
+      <button id="delete-btn" class="btn-danger" onclick="deleteCurrentImage()" title="Удалить текущее изображение (или нажми Delete)">💀 Удалить</button>
+      <button id="clear-all-btn" class="btn-secondary" onclick="clearAllImages()" title="Очистить всю галерею">🗑️ Очистить всё</button>
+    </div>
+    <span id="counter">0 / 0</span>
+  </div>
+
+  <div id="viewer-container">
+    <div id="empty-state" onclick="triggerNavUpload()">
+      <div class="empty-icon">🖼️</div>
+      <div class="empty-text">Нажмите, чтобы выбрать изображения</div>
+      <div class="empty-hint">(Можно выбирать по много штук сразу, они добавятся в список)</div>
+    </div>
+
+    <img id="display-image" src="" alt="Просмотр" style="display: none;">
+
+    <button class="nav-arrow prev" id="arrow-prev" onclick="prevImage()">❬</button>
+    <button class="nav-arrow next" id="arrow-next" onclick="nextImage()">❭</button>
+  </div>
+
+  <script src="image_viewer_scripts.js"></script>
+</body>
+</html>

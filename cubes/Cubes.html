@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ДнД Бросатель Кубов</title>
+    <link rel="stylesheet" href="cubes_styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="dice-roller">
+            <div class="input-group">
+                <label for="dice-count">Кол-во:</label>
+                <input type="number" id="dice-count" value="1" min="1" max="100">
+            </div>
+
+            <div class="dice-grid">
+                <button class="btn-coin" onclick="rollCoin()">🪙 Coin</button>
+                <button onclick="rollDice(4)">d4</button>
+                <button onclick="rollDice(6)">d6</button>
+                <button onclick="rollDice(8)">d8</button>
+                <button onclick="rollDice(10)">d10</button>
+                <button onclick="rollDice(12)">d12</button>
+                <button onclick="rollDice(20)">d20</button>
+                <button onclick="rollDice(100)">d100</button>
+            </div>
+
+            <div class="result-box" id="result-output"></div>
+        </div>
+
+        <div class="history-container">
+            <div id="history-list">
+                <div class="history-item empty">—</div>
+                <div class="history-item empty">—</div>
+                <div class="history-item empty">—</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="cubes_scripts.js"></script>
+</body>
+</html>

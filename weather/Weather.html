@@ -1,0 +1,64 @@
+<!-- Weather.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather System</title>
+    <link rel="stylesheet" href="weather_styles.css">
+</head>
+<body>
+
+<div class="weather-panel">
+
+    <div class="section">
+
+        <div class="field">
+            <label>Погода</label>
+
+            <select id="weatherSelect">
+                <option value="clear">Ясно</option>
+                <option value="rain">Сильный дождь</option>
+                <option value="snow">Снегопад</option>
+                <option value="fog">Туман</option>
+                <option value="storm">Шторм</option>
+                <option value="wind">Сильный ветер</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label>Температура</label>
+
+            <div class="temp-row">
+                <input type="range" min="-40" max="50" value="18" id="tempSlider">
+                <span id="tempValue">18°C</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="result">
+
+        <div class="weather-top">
+            <div class="weather-icon" id="weatherIcon">☀</div>
+
+            <div>
+                <div class="weather-title" id="weatherTitle">Ясно</div>
+                <div class="weather-temp" id="weatherTemp">18°C</div>
+            </div>
+        </div>
+
+        <div class="effect-box">
+            <div class="effect-title">Эффекты</div>
+            <div class="effect-text" id="effectText">
+                Спокойная погода без негативных эффектов.
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="weather_scripts.js"></script>
+</body>
+</html>

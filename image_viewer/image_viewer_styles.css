@@ -1,0 +1,300 @@
+@import url('../desktop_theme.css');
+:root {
+  --bg:         #0a0b0d;
+  --panel:      #12141a;
+  --surface:    #1c1f28;
+  --border:     #2a2e3a;
+  --accent:     #c0392b;
+  --gold:       #c9a84c;
+  --text:       #d4c9b0;
+  --text-dim:   #9e9e9d;
+  --glow:       rgba(192, 57, 43, 0.35);
+  --gold-glow:  rgba(201, 168, 76, 0.2);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background: var(--bg);
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--text);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+/* Верхняя панель управления */
+/* Update toolbar for responsive layout */
+#toolbar {
+  min-height: 44px;
+  height: auto;
+  padding: 8px 10px;
+  background: rgba(18, 20, 26, 0.95);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0; /* Prevent collapsing when container takes up space */
+}
+
+/* Allow buttons to wrap nicely */
+.actions-left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Ensure the container takes remaining space dynamically */
+#viewer-container {
+  flex: 1 1 auto;
+  width: 100%;
+  position: relative;
+  overflow: hidden; /* Hide anything that spills out */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Maintain aspect ratio and scale inside the container */
+#display-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* СТИЛЬНАЯ КНОПКА ЗАГРУЗКИ */
+#upload-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72em;
+  letter-spacing: 1.5px;
+  background: var(--surface);
+  color: var(--gold);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: 4px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+#upload-btn:hover {
+  background: rgba(201, 168, 76, 0.1);
+  border-color: var(--gold);
+  color: #fff;
+  box-shadow: 0 0 12px var(--gold-glow), inset 0 0 4px rgba(201, 168, 76, 0.2);
+  transform: translateY(-1px);
+}
+
+#upload-btn:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+#counter {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78em;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Контейнер просмотра */
+#viewer-container {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #060709;
+}
+
+/* Состояние "пусто" (зона клика по центру) */
+#empty-state {
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 40px;
+  border: 1px dashed rgba(201, 168, 76, 0.2);
+  border-radius: 8px;
+  background: rgba(18, 20, 26, 0.4);
+  max-width: 360px;
+}
+
+#empty-state:hover {
+  border-color: var(--gold);
+  background: rgba(18, 20, 26, 0.7);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(201, 168, 76, 0.05);
+}
+
+.empty-icon {
+  font-size: 3em;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+  transition: transform 0.3s ease;
+}
+
+#empty-state:hover .empty-icon {
+  transform: scale(1.1) rotate(3deg);
+}
+
+.empty-text {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9em;
+  letter-spacing: 1.5px;
+  color: var(--text);
+  text-transform: uppercase;
+}
+
+.empty-hint {
+  font-size: 0.85em;
+  color: var(--text-dim);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* Главное изображение */
+#display-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 0 30px rgba(0,0,0,0.8));
+}
+
+/* ГОТИЧЕСКИЕ СТРЕЛОЧКИ НАВИГАЦИИ */
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(18, 20, 26, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+  color: rgba(212, 201, 176, 0.3);
+  font-size: 1.4em;
+  width: 44px;
+  height: 70px;
+  cursor: pointer;
+  display: none; /* Включается из JS */
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 4px;
+  backdrop-filter: blur(2px);
+  opacity: 0; /* Прячутся, пока мышка не в контейнере */
+}
+
+.nav-arrow:hover {
+  background: rgba(28, 31, 40, 0.85);
+  color: var(--gold);
+  border-color: rgba(201, 168, 76, 0.4);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), 0 0 10px var(--gold-glow);
+}
+
+.nav-arrow:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.nav-arrow.prev { 
+  left: 15px; 
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.nav-arrow.next { 
+  right: 15px; 
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Плавное появление стрелок при наведении на окно просмотра */
+#viewer-container:hover .nav-arrow {
+  opacity: 1;
+}
+
+/* Жестко скрываем системный инпут, чтобы убрать надпись "файл не выбран" */
+.hidden-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+  pointer-events: none;
+}
+
+/* Группировка элементов слева в панели */
+.actions-left {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Кнопка удаления (Мрачно-красная D&D стилистика) */
+.btn-danger {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72em;
+  letter-spacing: 1.5px;
+  background: rgba(192, 57, 43, 0.15);
+  color: #e74c3c;
+  border: 1px solid rgba(192, 57, 43, 0.4);
+  border-radius: 4px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-transform: uppercase;
+  display: none; /* Включается из JS, когда есть картинки */
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.btn-danger:hover {
+  background: var(--accent);
+  border-color: #e74c3c;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(192, 57, 43, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-danger:active {
+  transform: translateY(1px);
+}
+
+/* Кнопка дополнительной очистки всего списка */
+.btn-secondary {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72em;
+  letter-spacing: 1.5px;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-transform: uppercase;
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--text-dim);
+  color: #fff;
+}
+/* ===== Единый стиль D&D Desktop ===== */
+#viewer-container { background: var(--bg); }

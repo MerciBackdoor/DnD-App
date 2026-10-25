@@ -1,0 +1,195 @@
+@import url('../desktop_theme.css');
+:root {
+    --bg-color: #1a1615;
+    --card-bg: #26211f;
+    --accent-gold: #c5a059;
+    --accent-gold-hover: #e5be75;
+    --text-main: #e2d9cd;
+    --text-muted: #a39684;
+    --border-color: #3d3530;
+    
+    --cp-color: #b87333;
+    --sp-color: #c0c0c0;
+    --gp-color: #ffd700;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Philosopher', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Центрируем приложение по вертикали для компактного вида */
+    padding: 1rem;
+    background-image: radial-gradient(circle at center, #2d221e 0%, #1a1615 100%);
+}
+
+.app-container {
+    width: 100%;
+    max-width: 500px; /* Уменьшили общую ширину приложения */
+    background-color: transparent;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 1.5rem; /* Уменьшили отступ от заголовка */
+}
+
+header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem; /* Сделали заголовок более аккуратным и компактным */
+    color: var(--accent-gold);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    letter-spacing: 1px;
+}
+
+.control-panel {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+button {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 0.6rem 2rem; /* Сделали кнопку компактнее */
+    background-color: #4a1512;
+    color: var(--accent-gold);
+    border: 2px solid var(--accent-gold);
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #5c1b17;
+    color: var(--accent-gold-hover);
+    border-color: var(--accent-gold-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.6);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+.loot-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1.2rem; /* Сжали внутренние отступы карточки */
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+.card-accent-line {
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+}
+
+.loot-card h2 {
+    font-family: 'Marcellus', serif;
+    font-size: 1rem; /* Чуть уменьшили подзаголовок */
+    color: var(--text-muted);
+    margin-bottom: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.trinket-section {
+    background-color: rgba(0,0,0,0.2);
+    border-left: 3px solid var(--accent-gold);
+    padding: 0.8rem 1rem; /* Уменьшили пустые пространства вокруг текста */
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 1rem;
+}
+
+#trinket-text {
+    font-size: 1.1rem; /* Сделали шрифт компактнее для длинных описаний */
+    line-height: 1.4;
+    font-style: italic;
+}
+
+.coins-section h3 {
+    font-family: 'Marcellus', serif;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.coins-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.coin {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    background-color: rgba(0,0,0,0.15);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.coin-icon {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+    box-shadow: inset 0 1px 3px rgba(255,255,255,0.4);
+}
+
+.coin.gp { color: var(--gp-color); }
+.coin.gp .coin-icon { background-color: var(--gp-color); }
+
+.coin.sp { color: var(--sp-color); }
+.coin.sp .coin-icon { background-color: var(--sp-color); }
+
+.coin.cp { color: var(--cp-color); }
+.coin.cp .coin-icon { background-color: var(--cp-color); }
+
+.hidden {
+    display: none !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* ===== Единый стиль D&D Desktop ===== */
+:root {
+  --bg-color: var(--bg);
+  --card-bg: var(--panel);
+  --accent-gold: var(--gold);
+  --text-main: var(--text);
+  --text-muted: var(--text-dim);
+  --border-color: var(--border);
+}
+body { font-family: var(--font-body); font-size: 1.05em; background-image: none; }
+header h1 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; letter-spacing: 2px; text-shadow: none; }
+button { background-color: var(--surface); color: var(--gold); border: 1px solid rgba(201,168,76,.4); border-radius: 4px; font-size: .85rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; box-shadow: none; }
+button:hover { background-color: rgba(201,168,76,.1); color: #fff; border-color: var(--gold); transform: none; box-shadow: none; }
+button:disabled { opacity: .45; cursor: default; }
+.loot-card { background-color: var(--panel); border: 1px solid var(--border); border-radius: 5px; box-shadow: 0 3px 10px rgba(0,0,0,.5); }
+.loot-card h2, .coins-section h3 { font-family: var(--font-display); font-size: .75rem; font-weight: 600; letter-spacing: 1px; }
+.trinket-section { background-color: var(--surface); border-left: 3px solid var(--gold); }
+#trinket-text { font-size: 1.2rem; }
+.coin { background-color: var(--surface); border: 1px solid var(--border); font-family: var(--font-display); font-size: .95rem; }

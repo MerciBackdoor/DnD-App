@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaos Meter</title>
+    <link rel="stylesheet" href="chaos_meter_styles.css">
+</head>
+<body>
+    <div class="gauge-card">
+        <div class="gauge-interface-row">
+            
+            <div class="btn-column">
+                <button class="btn btn-success" onclick="changeChaos(-10)">-10%</button>
+                <button class="btn btn-success" onclick="changeChaos(-5)">-5%</button>
+                <button class="btn btn-success" onclick="changeChaos(-1)">-1%</button>
+            </div>
+
+            <div class="gauge-container">
+                <svg viewBox="0 0 320 165" class="gauge-svg">
+                    <defs>
+                        <linearGradient id="gauge-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#2ecc71"/>
+                            <stop offset="30%" stop-color="#ffcc00"/>
+                            <stop offset="65%" stop-color="#ff9933"/>
+                            <stop offset="100%" stop-color="#ff4d4d"/>
+                        </linearGradient>
+                    </defs>
+                    
+                    <path d="M 40 160 A 120 120 0 0 1 280 160" fill="none" stroke="#222" stroke-width="24" stroke-linecap="round"/>
+                    <path d="M 40 160 A 120 120 0 0 1 280 160" fill="none" stroke="url(#gauge-gradient)" stroke-width="18" stroke-linecap="round"/>
+                    
+                    <circle cx="160" cy="160" r="11" fill="#e0e0e0" />
+                    <circle cx="160" cy="160" r="5" fill="#111" />
+                    
+                    <line id="gauge-needle" x1="160" y1="160" x2="160" y2="45" stroke="#e74c3c" stroke-width="5" stroke-linecap="round" />
+                </svg>
+                <div class="gauge-value" id="chaos-percentage">0%</div>
+            </div>
+
+            <div class="btn-column">
+                <button class="btn btn-danger" onclick="changeChaos(1)">+1%</button>
+                <button class="btn btn-danger" onclick="changeChaos(5)">+5%</button>
+                <button class="btn btn-danger" onclick="changeChaos(10)">+10%</button>
+            </div>
+
+        </div>
+
+        <div class="gauge-footer">
+            <div class="status-badge" id="chaos-status">Святоши</div>
+            <button class="btn-reset" onclick="resetAll()">Сбросить</button>
+        </div>
+    </div>
+
+    <script src="chaos_meter_scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,271 @@
+@import url('../desktop_theme.css');
+:root {
+  --bg:             #2d2e3a;
+  --ball-size:      220px;
+  --gold:           #c9a84c;
+  --answer-affirm:  #7ecb8f;
+  --answer-neutral: #7ba8d4;
+  --answer-deny:    #d47b7b;
+  --text:           #d4c9b0;
+  --text-dim:       #5a5752;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--text);
+  user-select: none;
+}
+
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 12px 16px;
+  width: 100%;
+}
+
+/* ── Заголовок ────────────────────────────────────────────────────────────── */
+.title-rune {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62em;
+  letter-spacing: 3px;
+  color: var(--gold);
+  opacity: 0.65;
+  text-transform: uppercase;
+}
+
+/* ── Сцена с шаром ────────────────────────────────────────────────────────── */
+.ball-stage {
+  position: relative;
+  width: var(--ball-size);
+  height: var(--ball-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.glow-ring {
+  position: absolute;
+  width: 115%;
+  height: 115%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(80, 60, 180, 0.20) 0%, transparent 70%);
+  animation: ring-pulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes ring-pulse {
+  0%, 100% { transform: scale(1);    opacity: 0.5; }
+  50%       { transform: scale(1.09); opacity: 1;   }
+}
+
+/* ── Шар ──────────────────────────────────────────────────────────────────── */
+.ball {
+  width: var(--ball-size);
+  height: var(--ball-size);
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  background:
+    radial-gradient(circle at 35% 35%, #2a2d6b 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, #0a0c20 0%, transparent 55%),
+    radial-gradient(circle at 50% 50%, #1a1e4a 0%, #090b18 75%, #05060e 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 0 60px rgba(50,40,150,0.35),
+    0 8px 40px rgba(0,0,0,0.8),
+    inset 0 -8px 30px rgba(0,0,0,0.6);
+  transition: box-shadow 0.2s;
+}
+
+.ball:hover {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06) inset,
+    0 0 90px rgba(60,50,200,0.5),
+    0 12px 50px rgba(0,0,0,0.85),
+    inset 0 -8px 30px rgba(0,0,0,0.6);
+}
+
+.ball:active { transform: scale(0.97); }
+
+/* ── Блики ────────────────────────────────────────────────────────────────── */
+.shine-top {
+  position: absolute;
+  top: 11%;
+  left: 17%;
+  width: 44%;
+  height: 30%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 40% 35%, rgba(255,255,255,0.14) 0%, transparent 70%);
+  pointer-events: none;
+  transform: rotate(-20deg);
+}
+
+.shine-bottom {
+  position: absolute;
+  bottom: 13%;
+  right: 15%;
+  width: 28%;
+  height: 18%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(140,120,255,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Внутреннее окошко ────────────────────────────────────────────────────── */
+.ball-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.inner-window {
+  width: 52%;
+  height: 52%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, #060810 0%, #020305 100%);
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 0 20px rgba(0,0,0,0.95) inset, 0 0 10px rgba(80,60,200,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: box-shadow 0.4s;
+}
+
+/* Символ "8" */
+.inner-symbol {
+  font-family: 'Cinzel', serif;
+  font-size: 2.6em;
+  font-weight: 900;
+  color: rgba(60, 50, 160, 0.55);
+  line-height: 1;
+  transition: opacity 0.3s;
+}
+
+/* Точка-индикатор цвета (заменяет текст внутри шара) */
+.inner-dot {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.5s ease 0.15s;
+  box-shadow: 0 0 12px currentColor;
+}
+
+.ball.revealed .inner-symbol { opacity: 0; }
+.ball.revealed .inner-dot    { opacity: 0.9; }
+
+.ball.affirm  .inner-dot { background: var(--answer-affirm);  color: var(--answer-affirm); }
+.ball.neutral .inner-dot { background: var(--answer-neutral); color: var(--answer-neutral); }
+.ball.deny    .inner-dot { background: var(--answer-deny);    color: var(--answer-deny); }
+
+/* Свечение окошка по типу ответа */
+.ball.affirm  .inner-window { box-shadow: 0 0 20px rgba(0,0,0,0.95) inset, 0 0 18px rgba(80,200,100,0.25); }
+.ball.neutral .inner-window { box-shadow: 0 0 20px rgba(0,0,0,0.95) inset, 0 0 18px rgba(80,130,220,0.25); }
+.ball.deny    .inner-window { box-shadow: 0 0 20px rgba(0,0,0,0.95) inset, 0 0 18px rgba(220,80,80,0.25); }
+
+/* ── Блок ответа под шаром ────────────────────────────────────────────────── */
+.answer-box {
+  width: 100%;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Тонкая цветная линия сверху блока */
+.answer-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--line-color, transparent);
+  transition: background 0.4s;
+  border-radius: 6px 6px 0 0;
+}
+
+.answer-box.affirm  { --line-color: rgba(126,203,143,0.6); }
+.answer-box.neutral { --line-color: rgba(123,168,212,0.6); }
+.answer-box.deny    { --line-color: rgba(212,123,123,0.6); }
+
+.answer-box-text {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4em;
+  font-weight: 600;
+  letter-spacing: 1px;
+  line-height: 1.35;
+  color: var(--text-dim);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.45s ease 0.15s, transform 0.45s ease 0.15s, color 0.3s;
+}
+
+.answer-box-text.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.answer-box-text.affirm  { color: var(--answer-affirm); }
+.answer-box-text.neutral { color: var(--answer-neutral); }
+.answer-box-text.deny    { color: var(--answer-deny); }
+
+/* ── Shake ────────────────────────────────────────────────────────────────── */
+@keyframes shake {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  10%  { transform: translate(-6px, -3px) rotate(-2deg); }
+  20%  { transform: translate(6px, 4px) rotate(2deg); }
+  30%  { transform: translate(-5px, 4px) rotate(-1.5deg); }
+  40%  { transform: translate(5px, -4px) rotate(2deg); }
+  50%  { transform: translate(-4px, 3px) rotate(-1deg); }
+  60%  { transform: translate(4px, -3px) rotate(1deg); }
+  70%  { transform: translate(-3px, 3px) rotate(0deg); }
+  80%  { transform: translate(3px, -2px) rotate(-0.5deg); }
+  90%  { transform: translate(-1px, 1px) rotate(0.5deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.ball.shaking { animation: shake 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+
+/* ── Подсказка ────────────────────────────────────────────────────────────── */
+.hint {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.8em;
+  color: var(--text-dim);
+  text-align: center;
+  letter-spacing: 0.4px;
+  transition: opacity 0.4s;
+  min-height: 1.1em;
+}
+
+.hint.faded { opacity: 0.35; }
+
+/* ===== Единый стиль D&D Desktop ===== */
+:root { --bg: #0a0b0d; --text-dim: #9e9e9d; }
+body { font-size: 1.05em; }
+.answer-box { background: var(--panel); border: 1px solid var(--border); border-radius: 5px; max-width: 520px; }
+.title-rune { opacity: .85; }

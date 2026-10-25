@@ -1,0 +1,256 @@
+@import url('../desktop_theme.css');
+:root {
+    --bg-color: #0f0f14;
+    --app-bg: #161622;
+    --card-bg: #1f1f2e;
+    --accent-color: #d4af37;
+    --accent-hover: #f3e5ab;
+    --text-light: #f5f5f7;
+    --text-muted: #a0a0b8;
+    --danger-color: #ff4d4d;
+    --red-suit: #ff5252;
+    --black-suit: #4da6ff;
+    --gold-suit: #ffda66;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-light);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 1000px;
+    background: var(--app-bg);
+    border-radius: 14px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+    border: 1px solid #2a2a3d;
+    padding: 25px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #2a2a3d;
+    padding-bottom: 15px;
+}
+
+header h1 {
+    font-size: 2rem;
+    color: var(--accent-color);
+    letter-spacing: 1.5px;
+    text-shadow: 0 2px 10px rgba(212,175,55,0.2);
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 5px;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+    background: #11111a;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #222233;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Специфические размеры для полей управления */
+.deck-group {
+    flex: 3;
+    min-width: 280px;
+}
+
+.count-group {
+    flex: 0 0 75px;
+    min-width: 75px;
+}
+
+.count-group input {
+    text-align: center;
+    -moz-appearance: textfield;
+}
+
+.count-group input::-webkit-outer-spin-button,
+.count-group input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+select, input[type="number"] {
+    background: var(--card-bg);
+    border: 1px solid #3a3a54;
+    color: var(--text-light);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+select:focus, input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 8px rgba(212,175,55,0.3);
+}
+
+.button-group {
+    display: flex;
+    gap: 12px;
+    min-width: 280px;
+    flex: 1;
+}
+
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+}
+
+.primary-btn {
+    background: var(--accent-color);
+    color: #0f0f14;
+}
+
+.primary-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.secondary-btn {
+    background: transparent;
+    border: 1px solid #4a4a68;
+    color: var(--text-light);
+}
+
+.secondary-btn:hover {
+    background: #232336;
+    border-color: var(--text-muted);
+}
+
+.status-panel {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 25px;
+    font-style: italic;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 2px solid #34344d;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 250px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 800;
+    border-bottom: 1px solid #34344d;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+}
+
+.suit-red { color: var(--red-suit); }
+.suit-black { color: var(--black-suit); }
+.suit-gold { color: var(--gold-suit); }
+
+.card-body {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #e2e2e9;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.card-body b {
+    color: var(--accent-color);
+}
+
+.card-footer {
+    margin-top: 15px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: right;
+    border-top: 1px solid #34344d;
+    padding-top: 8px;
+    font-weight: bold;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* ===== Единый стиль D&D Desktop ===== */
+:root {
+  --bg-color: #0a0b0d; --app-bg: #12141a; --card-bg: #1c1f28;
+  --accent-color: #c9a84c; --accent-hover: #e5be75;
+  --text-light: #d4c9b0; --text-muted: #9e9e9d;
+}
+body { font-family: var(--font-body); font-size: 1.05em; padding: 14px; }
+.app-container { border: 1px solid var(--border); border-radius: 5px; box-shadow: 0 3px 10px rgba(0,0,0,.5); padding: 20px; }
+header { border-bottom: 1px solid var(--border); }
+header h1 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; letter-spacing: 2px; text-shadow: none; }
+.controls { background: var(--bg); border: 1px solid var(--border); border-radius: 5px; }
+label { font-family: var(--font-display); font-size: .7rem; font-weight: 600; letter-spacing: .5px; }
+select, input[type="number"] { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; font-family: var(--font-body); font-size: 1.05rem; }
+select:focus, input:focus { box-shadow: none; }
+.btn { border-radius: 4px; font-family: var(--font-display); font-size: .8rem; letter-spacing: 1.5px; text-transform: uppercase; }
+.primary-btn { background: var(--surface); color: var(--gold); border: 1px solid rgba(201,168,76,.4); }
+.primary-btn:hover { background: rgba(201,168,76,.1); border-color: var(--gold); color: #fff; transform: none; }
+.secondary-btn { border: 1px solid var(--border); color: var(--text-dim); }
+.secondary-btn:hover { background: var(--surface-hi); border-color: var(--gold); color: #fff; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 5px; box-shadow: 0 3px 10px rgba(0,0,0,.5); }
+.card-header { font-family: var(--font-display); font-size: 1rem; font-weight: 600; border-bottom: 1px solid var(--border); }
+.card-body { color: var(--text); font-size: 1.05rem; }
+.card-footer { border-top: 1px solid var(--border); }

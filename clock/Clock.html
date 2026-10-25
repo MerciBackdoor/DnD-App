@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock DnD</title>
+    <link rel="stylesheet" href="clock_styles.css">
+</head>
+<body>
+
+    <div class="campaign-container">
+        <header class="calendar-header">
+            <h1>День <span id="day-display">1</span></h1>
+            <p id="phase-display" class="phase-text">Рассвет</p>
+        </header>
+
+        <div class="clock-frame">
+            <div id="sky-backboard" class="sky-bg phase-dawn">
+                <div class="stars-overlay"></div>
+                
+                <div id="celestial-disc" class="celestial-disc">
+                    <div class="sun">☀️</div>
+                    <div class="moon">🌙</div>
+                </div>
+                
+                <div class="horizon-mask"></div>
+            </div>
+        </div>
+
+        <div class="digital-time">
+            <span id="time-display">06:00</span>
+        </div>
+
+        <div class="control-panel">
+            <div class="control-group">
+                <button onclick="changeTime(-60)">-1 ч</button>
+                <button onclick="changeTime(-30)">-30 мин</button>
+                <button onclick="changeTime(30)">+30 мин</button>
+                <button onclick="changeTime(60)">+1 ч</button>
+            </div>
+            <div class="control-group rests">
+                <button class="btn-rest" onclick="changeTime(60)">Короткий отдых (+1 ч)</button>
+                <button class="btn-rest long-rest" onclick="changeTime(480)">Продолжительный отдых (+8 ч)</button>
+            </div>
+            <div class="control-group days">
+                <button onclick="changeDay(-1)">Предыдущий день</button>
+                <button onclick="changeDay(1)">Следующий день</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="clock_scripts.js"></script>
+</body>
+</html>

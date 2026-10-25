@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&D Desktop</title>
+  <link rel="stylesheet" href="desktop_theme.css">
+  <link rel="stylesheet" href="desktop_styles.css">
+</head>
+<body>
+  <div id="desktop">
+
+    <!-- Левая панель: превью всех приложений -->
+    <aside id="sidebar">
+      <header class="side-head">
+        <h1>D&amp;D Desktop</h1>
+        <p>Выбери приложение</p>
+      </header>
+      <nav id="app-list"></nav>
+      <footer class="side-foot">
+        <span id="open-count">Открыто: 0</span>
+        <button id="close-all" type="button">Закрыть все</button>
+      </footer>
+    </aside>
+
+    <!-- Центр: окна открытых приложений -->
+    <main id="stage">
+      <div id="empty">
+        <div class="empty-rune">⚔</div>
+        <p>Здесь пока пусто.<br>Выбери приложение в списке слева.</p>
+      </div>
+      <div id="stack"></div>
+      <div id="spacer"></div>
+    </main>
+
+    <!-- Правый край: широкий ползунок прокрутки центральной области -->
+    <div id="vbar" title="Прокрутка окон">
+      <div id="vthumb"></div>
+    </div>
+
+  </div>
+
+  <script src="app_listeners.js"></script>
+  <script src="desktop_scripts.js"></script>
+</body>
+</html>

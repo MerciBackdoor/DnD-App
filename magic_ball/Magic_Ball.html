@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Magic Ball</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="magic_ball_styles.css">
+</head>
+<body>
+
+  <div class="app-wrapper">
+    <div class="title-rune">✦ МАГИЧЕСКИЙ ШАР ✦</div>
+
+    <div class="ball-stage">
+      <div class="glow-ring"></div>
+      <div class="ball" id="ball">
+        <div class="ball-face">
+          <div class="inner-window" id="inner-window">
+            <div class="inner-symbol">8</div>
+            <div class="inner-dot" id="inner-dot"></div>
+          </div>
+        </div>
+        <div class="shine-top"></div>
+        <div class="shine-bottom"></div>
+      </div>
+    </div>
+
+    <div class="answer-box" id="answer-box">
+      <div class="answer-box-text" id="answer-box-text">
+        Задай вопрос мысленно…
+      </div>
+    </div>
+
+    <div class="hint" id="hint">…и коснись шара</div>
+  </div>
+
+  <script src="magic_ball_scripts.js"></script>
+</body>
+</html>
