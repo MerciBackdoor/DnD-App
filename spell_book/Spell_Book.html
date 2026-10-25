@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Книга Заклинаний</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <div class="sidebar">
+      <div class="search-panel">
+        <input type="text" id="search-input" placeholder="Название (рус / eng)..." autocomplete="off">
+        <select id="level-filter">
+          <option value="all">Все уровни</option>
+          <option value="0">Заговоры [0]</option>
+          <option value="1">1 уровень [1]</option>
+          <option value="2">2 уровень [2]</option>
+          <option value="3">3 уровень [3]</option>
+          <option value="4">4 уровень [4]</option>
+          <option value="5">5 уровень [5]</option>
+          <option value="6">6 уровень [6]</option>
+          <option value="7">7 уровень [7]</option>
+          <option value="8">8 уровень [8]</option>
+          <option value="9">9 уровень [9]</option>
+        </select>
+      </div>
+      <div id="spell-list" class="spell-list">
+        </div>
+    </div>
+
+    <div class="content-panel">
+      <div id="empty-state" class="empty-state">
+        <div class="empty-icon">📖</div>
+        <div>Выберите заклинание для изучения</div>
+      </div>
+      <div id="spell-display" class="spell-display" style="display: none;">
+        </div>
+    </div>
+  </div>
+  <script src="dnd_spells_cleaned.js"></script>
+  <script src="scripts.js"></script>
+</body>
+</html>
