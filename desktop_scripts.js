@@ -21,7 +21,8 @@ const APPS = [
   { id: 'traps',    title: 'Конструктор ловушек', desc: 'Ловушки со СЛ и уроном',        icon: '🪤', color: '#8b5a2b', src: 'traps/Traps.html',                   height: 540 },
   { id: 'vivarium', title: 'Виварий',           desc: 'Свои монстры и враги',            icon: '🦂', color: '#8e3b46', src: 'vivarium/Vivarium.html',             height: 760 },
   { id: 'decks',    title: 'Колоды чудес',      desc: 'Карты Многих Вещей и другие',     icon: '🃏', color: '#d4af37', src: 'wonderful_decks/Wonderful_Decks.html', height: 640 },
-  { id: 'images',   title: 'Просмотр картинок', desc: 'Галерея карт и арта',             icon: '🖼️', color: '#5a8a8a', src: 'image_viewer/Image_Viewer.html',     height: 520 }
+  { id: 'images',   title: 'Просмотр картинок', desc: 'Галерея карт и арта',             icon: '🖼️', color: '#5a8a8a', src: 'image_viewer/Image_Viewer.html',     height: 520 },
+  { id: 'manuals',  title: 'Мануалы',           desc: 'Справочные тексты: бастионы и др.', icon: '📚', color: '#a0763c', src: 'manuals/Manuals.html',               height: 700 }
 ];
 
 const Desktop = (() => {

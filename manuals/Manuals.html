@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мануалы</title>
+  <link rel="stylesheet" href="manuals_styles.css">
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- Слева: поиск и список мануалов -->
+    <aside id="sidebar">
+      <div class="side-head">
+        <h2>Мануалы</h2>
+        <input type="text" id="search-input" placeholder="Поиск по названию и тексту..." autocomplete="off">
+        <select id="category-filter">
+          <option value="all">Все категории</option>
+        </select>
+      </div>
+      <div id="list-status" class="list-status"></div>
+      <div id="manual-list" class="manual-list"></div>
+    </aside>
+
+    <!-- Справа: чтение -->
+    <main class="reader">
+      <div id="empty-state" class="empty-state">
+        <div class="empty-icon">📚</div>
+        <div id="empty-text">Выберите мануал</div>
+      </div>
+
+      <div id="reader-view" class="reader-view" hidden>
+        <header class="reader-head">
+          <div class="reader-titles">
+            <h1 id="reader-title"></h1>
+            <div id="reader-meta" class="reader-meta"></div>
+          </div>
+          <div class="reader-tools">
+            <div id="hit-nav" class="hit-nav" hidden>
+              <button type="button" id="hit-prev" title="Предыдущее совпадение">‹</button>
+              <span id="hit-count"></span>
+              <button type="button" id="hit-next" title="Следующее совпадение">›</button>
+            </div>
+            <button type="button" id="toc-toggle" class="tool-btn" title="Показать или скрыть содержание">☰ Содержание</button>
+          </div>
+        </header>
+
+        <div id="reader-main" class="reader-main">
+          <div id="reader-body" class="reader-body">
+            <article id="manual-content" class="manual-content"></article>
+          </div>
+          <nav id="toc" class="toc">
+            <div class="toc-title">Содержание</div>
+            <div id="toc-list"></div>
+          </nav>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- library/index.js задаёт список файлов мануалов, manuals_scripts.js их загружает -->
+  <script src="library/index.js"></script>
+  <script src="manuals_scripts.js"></script>
+</body>
+</html>
