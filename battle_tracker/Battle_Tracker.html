@@ -9,6 +9,11 @@
   <link rel="stylesheet" href="battle_tracker_styles.css">
 </head>
 <body>
+  <div id="round-counter" title="Счётчик боя: 1 полный круг = 6 секунд">
+    <div class="rc-item"><span class="rc-label">Время</span><span class="rc-value" id="rc-seconds">0 сек.</span></div>
+    <div class="rc-item"><span class="rc-label">Раунды</span><span class="rc-value" id="rc-rounds">0</span></div>
+    <button type="button" class="rc-reset" onclick="resetRounds()" title="Сбросить счётчик">&#8635;</button>
+  </div>
   <h1>D&D Battle Tracker</h1>
   <div class="top-controls">
     <div class="file-ops">

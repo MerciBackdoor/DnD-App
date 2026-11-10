@@ -1,0 +1,245 @@
+@import url('../desktop_theme.css');
+
+/* ============================================================
+   Время и погода: часы кампании (слева) + погода (справа).
+   Правила привязаны к своей половине, чтобы стили не мешали друг другу.
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1.05em;
+  padding: 14px;
+}
+
+/* Две половины одной высоты; по вертикали растягиваются на всё окно */
+.cw-layout {
+  display: flex;
+  gap: 14px;
+  align-items: stretch;
+  max-width: 1100px;
+  margin: 0 auto;
+  min-height: calc(100vh - 28px);
+}
+.cw-pane { display: flex; min-width: 0; }
+.cw-pane > * { flex: 1; min-width: 0; }
+.clock-pane   { flex: 0 0 400px; }
+.weather-pane { flex: 1 1 0; }
+
+@media (max-width: 860px) {
+  .cw-layout { flex-direction: column; }
+  .clock-pane { flex: 0 0 auto; }
+}
+
+/* ---------------- Часы кампании ---------------- */
+.campaign-container {
+  background-color: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  box-shadow: 0 3px 10px rgba(0,0,0,.5);
+  padding: 18px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.calendar-header h1 {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.phase-text {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: bold;
+  margin: 0 0 14px 0;
+  letter-spacing: 1px;
+  transition: color 0.5s ease;
+}
+
+.clock-frame {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 14px auto;
+  border: 6px solid var(--surface);
+  outline: 2px solid var(--gold);
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+}
+
+.sky-bg {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: background 0.8s ease;
+}
+
+.stars-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px);
+  background-size: 40px 40px;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.phase-midnight { background: linear-gradient(to bottom, #05050a, #0b0b1a); }
+.phase-midnight .stars-overlay { opacity: 0.6; }
+
+.phase-dawn { background: linear-gradient(to bottom, #ff7e5f, #feb47b); }
+.phase-morning { background: linear-gradient(to bottom, #7ec0ee, #ece7c4); }
+.phase-afternoon { background: linear-gradient(to bottom, #4a90e2, #9bd2f7); }
+.phase-dusk { background: linear-gradient(to bottom, #2c3e50, #fd746c); }
+.phase-night { background: linear-gradient(to bottom, #0f2027, #203a43); }
+.phase-night .stars-overlay { opacity: 0.3; }
+
+.celestial-disc {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sun, .moon {
+  position: absolute;
+  font-size: 2rem;
+  left: calc(50% - 1rem);
+}
+.sun { bottom: 15px; }
+.moon { top: 15px; }
+
+.horizon-mask {
+  position: absolute;
+  top: 0;
+  left: calc(50% - 2px);
+  width: 4px;
+  height: 12px;
+  background-color: var(--gold);
+  border-radius: 0 0 2px 2px;
+}
+
+.digital-time {
+  font-size: 2.3rem;
+  font-family: var(--font-display);
+  background-color: var(--bg);
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  margin-bottom: 14px;
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(201,168,76,.3);
+}
+
+.control-panel { display: flex; flex-direction: column; gap: 10px; }
+.control-group { display: flex; justify-content: space-between; gap: 8px; }
+
+.clock-pane button {
+  flex: 1;
+  font-family: var(--font-display);
+  font-size: .72rem;
+  letter-spacing: .5px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 9px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.clock-pane button:hover { background-color: var(--surface-hi); border-color: var(--gold); color: #fff; }
+.clock-pane button:active { transform: scale(0.97); }
+.clock-pane .btn-rest  { border-color: rgba(46,204,113,.35); }
+.clock-pane .long-rest { border-color: rgba(201,168,76,.35); }
+
+/* ---------------- Погода ---------------- */
+.weather-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  box-shadow: 0 3px 10px rgba(0,0,0,.5);
+}
+
+.weather-panel .section {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.weather-panel .field label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-display);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .5px;
+  color: var(--text-dim);
+}
+
+.weather-panel select {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: #fff;
+  padding: 10px;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+}
+.weather-panel select:focus { outline: none; border-color: var(--gold); }
+
+.temp-row { display: flex; align-items: center; gap: 12px; }
+.weather-panel input[type="range"] { width: 100%; accent-color: var(--gold); }
+#tempValue { min-width: 55px; font-family: var(--font-display); color: var(--gold); font-size: 1rem; }
+
+.weather-panel .result {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.weather-top { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+
+.weather-icon {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+}
+
+.weather-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; letter-spacing: 1px; color: var(--gold); margin-bottom: 4px; }
+.weather-temp  { font-family: var(--font-display); font-size: 1.8rem; color: #fff; }
+
+.effect-box {
+  flex: 1;
+  background: var(--surface);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 4px 4px 0;
+  padding: 14px;
+}
+.effect-title { font-family: var(--font-display); font-size: .75rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.effect-text  { line-height: 1.5; color: var(--text); font-size: 1.05rem; white-space: pre-line; }

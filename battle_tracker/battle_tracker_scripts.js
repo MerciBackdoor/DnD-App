@@ -1,5 +1,6 @@
 let combatants = [];
 let currentTurnIndex = 0;
+let rounds = 0;   // полностью пройденные круги инициативы (1 круг = 6 секунд боя)
 const deathBell = new Audio('Bell.mp3');
 deathBell.volume = 0.3; // Значение от 0.0 (тишина) до 1.0 (максимум)
 
@@ -73,6 +74,94 @@ const EXHAUSTION_EFFECTS = [
     "ИСТОЩЕНИЕ (УР 6) - Смерть."
 ];
 
+// ===== Состояния: связи между ними, иммунитеты, концентрация =====
+// Какие ещё состояния существо получает вместе с данным (по текстам описаний выше)
+const CONDITION_GRANTS = {
+    "БЕССОЗНАТЕЛЬНЫЙ": ["НЕДЕЕСПОСОБНЫЙ", "СБИТЫЙ С НОГ"],
+    "ОКАМЕНЕВШИЙ":     ["НЕДЕЕСПОСОБНЫЙ"],
+    "ОШЕЛОМЛЁННЫЙ":    ["НЕДЕЕСПОСОБНЫЙ"],
+    "ПАРАЛИЗОВАННЫЙ":  ["НЕДЕЕСПОСОБНЫЙ"]
+};
+// Что остаётся, когда состояние оканчивается («...вы остаётесь сбитым с ног»)
+const CONDITION_REMAINS = { "БЕССОЗНАТЕЛЬНЫЙ": ["СБИТЫЙ С НОГ"] };
+// Иммунитеты, которые даёт состояние
+const CONDITION_IMMUNITIES = { "ОКАМЕНЕВШИЙ": ["ОТРАВЛЕННЫЙ"] };
+// Состояния, при которых концентрация нарушена и невозможна
+const CONC_BREAKING = ["НЕДЕЕСПОСОБНЫЙ"];
+
+const CONC_REMINDER = "Получен урон, спасбросок для поддержания концентрации";
+const ROUNDS_PER_MINUTE = 10;   // раунд = 6 секунд
+
+// Явно выбранные состояния + те, что они за собой влекут
+function effectiveConditions(c) {
+    const out = [...c.conditions];
+    c.conditions.forEach(src => (CONDITION_GRANTS[src] || []).forEach(g => { if (!out.includes(g)) out.push(g); }));
+    return out;
+}
+function conditionBlock(cond) { return cond + "\n" + CONDITION_DB[cond].trim(); }
+function addConditionBlock(c, cond) {
+    c.showNotes = true;
+    c.notes = (c.notes.trim() + (c.notes.trim() ? '\n\n' : '') + conditionBlock(cond)).trim();
+}
+function removeConditionBlock(c, cond) {
+    c.notes = c.notes.replace(conditionBlock(cond), "").trim();
+}
+function grantedBy(c, cond) { return c.conditions.filter(src => (CONDITION_GRANTS[src] || []).includes(cond)); }
+function immuneSource(c, cond) { return c.conditions.find(src => (CONDITION_IMMUNITIES[src] || []).includes(cond)); }
+
+function renderConditionOptions(index, c) {
+    const eff = effectiveConditions(c);
+    return Object.keys(CONDITION_DB).map(cond => {
+        const by = grantedBy(c, cond)[0];
+        const imm = immuneSource(c, cond);
+        const lock = by ? 'Следствие состояния: ' + by : imm ? 'Иммунитет: ' + imm : '';
+        return `<label class="${lock ? 'locked' : ''}"${lock ? ` title="${lock}"` : ''}><input type="checkbox" ${eff.includes(cond) ? 'checked' : ''} ${lock ? 'disabled' : ''} onchange="toggleCondition(${index}, '${cond}')"> ${cond}</label>`;
+    }).join('');
+}
+
+// Концентрация привязана к счётчику боя: хранится раунд, на котором она заканчивается
+function concRemaining(c) { return Math.max(0, (c.concentrationEnd || 0) - rounds); }
+function concTitle(c) {
+    if (!c.concentration) return 'Начать концентрацию';
+    const r = concRemaining(c);
+    return `Концентрация: осталось ${r} р. (${r * 6} сек.). Нажмите, чтобы прервать`;
+}
+function concentrationBlocker(c) {
+    if (c.isDead || c.hp <= 0) return "Существо без сознания, концентрироваться оно не может.";
+    if (effectiveConditions(c).some(x => CONC_BREAKING.includes(x))) return "Недееспособное существо не может поддерживать концентрацию.";
+    return null;
+}
+function breakConcentration(c, reason) {
+    c.concentration = false;
+    c.concentrationEnd = 0;
+    c.showNotes = true;
+    const msg = "Концентрация нарушена: " + reason;
+    c.notes = (c.notes.trim() + (c.notes.trim() ? "\n\n" : "") + msg).trim();
+}
+function addConcentrationReminder(c) {
+    c.showNotes = true;
+    c.notes = (c.notes.trim() + (c.notes.trim() ? "\n\n" : "") + CONC_REMINDER).trim();
+}
+function expireConcentrations() {
+    combatants.forEach(c => {
+        if (c.concentration && rounds >= c.concentrationEnd) {
+            c.concentration = false;
+            c.concentrationEnd = 0;
+        }
+    });
+}
+// Старые сохранения считали «раунды» по ходам: переводим остаток в конечный раунд
+function normalizeConcentration() {
+    combatants.forEach(c => {
+        if (c.concentration && typeof c.concentrationEnd !== 'number') {
+            c.concentrationEnd = rounds + (c.concentrationCounter > 0 ? c.concentrationCounter : ROUNDS_PER_MINUTE);
+        }
+        if (typeof c.concentrationEnd !== 'number') c.concentrationEnd = 0;
+        delete c.concentrationCounter;
+        delete c.maxConcentration;
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     loadCombatants();
     document.getElementById('addForm').addEventListener('submit', handleAdd);
@@ -86,10 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.combatants) {
                 combatants = data.combatants;
                 currentTurnIndex = data.currentTurnIndex || 0;
+                rounds = data.rounds || 0;
             } else {
                 combatants = data;
                 currentTurnIndex = 0;
+                rounds = 0;
             }
+            normalizeConcentration();
             saveCombatants();
             render();
         };
@@ -119,6 +211,7 @@ function formatRichText(text) {
     html = html.replace(/(.+ умер от потери крови)/gi, '<span class="death-blood">$1</span>');
     html = html.replace(/(преимущ[а-яё]*)/gi, '<span class="text-adv">$1</span>');
     html = html.replace(/(помех[а-яё]*)/gi, '<span class="text-disadv">$1</span>');
+    html = html.replace(/(Получен урон, спасбросок для поддержания концентрации)/g, '<span class="text-disadv"><b>$1</b></span>');
     html = html.replace(/(СМЕРТЬ ОТ МАССИВНОГО УРОНА)/g, '<span class="text-disadv"><b>$1</b></span>');
     Object.keys(CONDITION_DB).forEach(cond => {
         const regex = new RegExp(`(${cond})`, 'gi');
@@ -153,8 +246,7 @@ function handleAdd(e) {
         isDead: false,
         inspiration: false,
         concentration: false,
-        concentrationCounter: 0,
-        maxConcentration: 0,
+        concentrationEnd: 0,
         conditions: [],
         exhaustion: 0,
         showCondMenu: false,
@@ -169,6 +261,7 @@ function handleAdd(e) {
 function render() {
     const container = document.getElementById('combatants');
     container.innerHTML = '';
+    renderRounds();
     combatants.forEach((c, index) => {
         const div = document.createElement('div');
         div.className = `combatant ${index === currentTurnIndex ? 'active' : ''} ${c.isDead ? 'dead' : ''} ${c.isCollapsed ? 'collapsed' : ''} ${c.showNotes ? 'notes-open' : ''}`;
@@ -205,13 +298,11 @@ function render() {
                 <div class="cond-box hide-on-collapse">
                     <button class="icon-btn" onclick="toggleCondMenu(${index})">✨</button>
                     <div class="condition-menu ${c.showCondMenu ? 'open' : ''}">
-                        ${Object.keys(CONDITION_DB).map(cond => `
-                            <label><input type="checkbox" ${c.conditions.includes(cond) ? 'checked' : ''} onchange="toggleCondition(${index}, '${cond}')"> ${cond}</label>
-                        `).join('')}
+                        ${renderConditionOptions(index, c)}
                     </div>
                 </div>
                 <div class="conc-box hide-on-collapse">
-                    <button class="icon-btn" onclick="setConcentration(${index})">${c.concentration ? '🌀<span class="conc-counter">' + c.concentrationCounter + '</span>' : '💤'}</button>
+                    <button class="icon-btn" onclick="setConcentration(${index})" title="${concTitle(c)}">${c.concentration ? '🌀<span class="conc-counter">' + concRemaining(c) + '</span>' : '💤'}</button>
                 </div>
                 <div class="init-box hide-on-collapse">⏳ <input type="number" value="${c.initiative}" onchange="updateProp(${index}, 'initiative', this.value)" style="width:35px"></div>
                 <div class="health-bar hide-on-collapse">
@@ -251,6 +342,7 @@ window.changeHp = (index, sign) => {
             c.deathSaves = {success: 0, failure: 0};
         }
     } else {
+        const damageTaken = mod;
         if (c.tempHp > 0) {
             if (mod <= c.tempHp) {
                 c.tempHp -= mod;
@@ -280,6 +372,7 @@ window.changeHp = (index, sign) => {
             }
         }
         if (c.hp <= 0) c.concentration = false;
+        if (damageTaken > 0 && c.concentration) addConcentrationReminder(c);
     }
     sortAndRender();
 };
@@ -290,16 +383,13 @@ window.nextTurn = () => {
     while ((combatants[nextIndex].isDead || combatants[nextIndex].isCollapsed) && combatants.some(x => !x.isDead && !x.isCollapsed)) {
         nextIndex = (nextIndex + 1) % combatants.length;
     }
+    // Полный круг: ход перешёл через конец списка к началу. Мёртвые и свёрнутые пропускаются циклом выше,
+    // поэтому в круге участвуют только активные бойцы.
+    if (combatants.some(x => !x.isDead && !x.isCollapsed) && nextIndex <= currentTurnIndex) { rounds++; expireConcentrations(); }
     currentTurnIndex = nextIndex;
     if (combatants[currentTurnIndex]) {
         combatants[currentTurnIndex].reaction = true;
     }
-    combatants.forEach(c => {
-        if (c.concentration && c.concentrationCounter > 0) {
-            c.concentrationCounter--;
-            if (c.concentrationCounter === 0) c.concentration = false;
-        }
-    });
     saveCombatants();
     render();
 };
@@ -310,21 +400,12 @@ window.prevTurn = () => {
     while ((combatants[prevIndex].isDead || combatants[prevIndex].isCollapsed) && combatants.some(x => !x.isDead && !x.isCollapsed)) {
         prevIndex = (prevIndex - 1 + combatants.length) % combatants.length;
     }
+    // Шаг назад через начало списка отменяет последний засчитанный круг
+    if (combatants.some(x => !x.isDead && !x.isCollapsed) && prevIndex >= currentTurnIndex && rounds > 0) rounds--;
     currentTurnIndex = prevIndex;
     if (combatants[currentTurnIndex]) {
         combatants[currentTurnIndex].reaction = true;
     }
-    
-    combatants.forEach(c => {
-        if (c.concentration) {
-            c.concentrationCounter++;
-            
-            if (c.concentrationCounter > c.maxConcentration) {
-                c.concentration = false;
-                c.concentrationCounter = 0;
-            }
-        }
-    });
     
     saveCombatants();
     render();
@@ -341,7 +422,7 @@ window.updateExhaustion = (i, level) => {
         if(!c.notes.includes(eff)) c.notes = (c.notes.trim() + (c.notes.trim() ? '\n' : '') + eff).trim();
     }
     if(level === 6) { 
-        c.isDead = true; c.hp = 0; 
+        c.isDead = true; c.hp = 0; c.concentration = false; 
         c.showNotes = true;
         deathBell.currentTime = 0;
         deathBell.play().catch(e => console.log("Аудио заблокировано браузером:", e));
@@ -355,15 +436,30 @@ window.updateExhaustion = (i, level) => {
 
 window.toggleCondition = (i, cond) => {
     const c = combatants[i];
-    const fullBlock = cond + "\n" + CONDITION_DB[cond].trim();
-    if (c.conditions.includes(cond)) {
-        c.conditions = c.conditions.filter(x => x !== cond);
-        c.notes = c.notes.replace(fullBlock, "").trim();
-    } else {
+    const before = new Set(effectiveConditions(c));
+    const adding = !c.conditions.includes(cond);
+
+    if (adding) {
+        if (immuneSource(c, cond)) { render(); return; }
         c.conditions.push(cond);
-        c.showNotes = true;
-        c.notes = (c.notes.trim() + (c.notes.trim() ? '\n\n' : '') + fullBlock).trim();
+        // иммунитеты: состояния, к которым новое состояние даёт иммунитет, снимаются
+        (CONDITION_IMMUNITIES[cond] || []).forEach(x => { c.conditions = c.conditions.filter(y => y !== x); });
+    } else {
+        c.conditions = c.conditions.filter(x => x !== cond);
+        // то, что остаётся после окончания состояния (Бессознательный → остаёмся сбитыми с ног)
+        (CONDITION_REMAINS[cond] || []).forEach(r => {
+            if (before.has(r) && !c.conditions.includes(r)) c.conditions.push(r);
+        });
     }
+
+    const after = new Set(effectiveConditions(c));
+    before.forEach(x => { if (!after.has(x)) removeConditionBlock(c, x); });
+    after.forEach(x => { if (!before.has(x)) addConditionBlock(c, x); });
+
+    if (adding && c.concentration && [...after].some(x => CONC_BREAKING.includes(x))) {
+        breakConcentration(c, cond);
+    }
+
     c.notes = c.notes.replace(/\n{3,}/g, '\n\n').trim();
     saveCombatants();
     render();
@@ -379,15 +475,17 @@ window.updateProp = (i, p, v) => {
 window.setConcentration = (i) => {
     const c = combatants[i];
     if (!c.concentration) {
-        const val = prompt("Длительность (раунды):", "10");
-        const r = parseInt(val);
-        if (r > 0) { 
-            c.concentration = true; 
-            c.concentrationCounter = r;
-            c.maxConcentration = r;
-        }
-    } else { 
-        c.concentration = false; 
+        const blocked = concentrationBlocker(c);
+        if (blocked) { alert(blocked); return; }
+        const val = prompt("Длительность концентрации (минуты; 1 минута = 10 раундов):", "1");
+        if (val === null) return;
+        const minutes = parseFloat(String(val).replace(',', '.'));
+        if (!(minutes > 0)) return;
+        c.concentration = true;
+        c.concentrationEnd = rounds + Math.max(1, Math.round(minutes * ROUNDS_PER_MINUTE));
+    } else {
+        c.concentration = false;
+        c.concentrationEnd = 0;
     }
     saveCombatants();
     render();
@@ -469,7 +567,7 @@ window.longRest = () => {
 };
 
 window.exportCombatants = () => {
-    const data = { combatants, currentTurnIndex };
+    const data = { combatants, currentTurnIndex, rounds };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -488,7 +586,7 @@ function sortAndRender() { combatants.sort((a, b) => b.initiative - a.initiative
 function getHpColor(p) { return p > 70 ? '#2ecc71' : p > 30 ? '#f1c40f' : '#e74c3c'; }
 
 function saveCombatants() { 
-    const data = { combatants, currentTurnIndex };
+    const data = { combatants, currentTurnIndex, rounds };
     localStorage.setItem('dnd_v5_data', JSON.stringify(data)); 
 }
 
@@ -499,11 +597,13 @@ function loadCombatants() {
         if (parsed.combatants) {
             combatants = parsed.combatants;
             currentTurnIndex = parsed.currentTurnIndex || 0;
+            rounds = parsed.rounds || 0;
         } else {
             combatants = parsed;
         }
     }
-    render(); 
+    normalizeConcentration();
+    render();
 }
 
 function renderDeathSaves(index, c) {
@@ -529,4 +629,23 @@ window.handleDeathSave = (i, t, s) => {
     }
     saveCombatants();
     render();
+};
+
+// ===== Счётчик боя: время (6 сек. на круг) и количество раундов =====
+function renderRounds() {
+    const sec = document.getElementById('rc-seconds');
+    const rnd = document.getElementById('rc-rounds');
+    if (sec) sec.textContent = (rounds * 6) + ' сек.';
+    if (rnd) rnd.textContent = rounds;
+}
+
+window.resetRounds = () => {
+    if (rounds === 0) return;
+    if (confirm("Сбросить счётчик боя (время и раунды)?")) {
+        // у активных концентраций остаток времени сохраняется
+        combatants.forEach(c => { if (c.concentration) c.concentrationEnd = Math.max(1, c.concentrationEnd - rounds); });
+        rounds = 0;
+        saveCombatants();
+        render();
+    }
 };

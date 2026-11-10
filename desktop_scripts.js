@@ -8,10 +8,10 @@
 const APPS = [
   { id: 'ability',  title: 'Характеристики',    desc: 'Лист героя, навыки, заклинания',  icon: '🛡️', color: '#c9a84c', src: 'ability_scores/Ability_Scores.html', height: 540 },
   { id: 'battle',   title: 'Боевой трекер',     desc: 'Инициатива, ХП, состояния',       icon: '⚔️', color: '#c0392b', src: 'battle_tracker/Battle_Tracker.html', height: 620 },
-  { id: 'bestiary', title: 'Бестиарий',         desc: 'Поиск и карточки существ',        icon: '🐉', color: '#6b8e5a', src: 'bestiary/Bestiary.html',             height: 460 },
+  { id: 'bestiary', title: 'Бестиарий',         desc: 'Поиск, список и карточки существ',        icon: '🐉', color: '#6b8e5a', src: 'bestiary/Bestiary.html',             height: 680 },
   { id: 'body',     title: 'Анатомия попаданий', desc: 'Куда попал удар (к12)',           icon: '🩸', color: '#a8453d', src: 'body_parts/Body_Parts.html',         height: 480 },
   { id: 'chaos',    title: 'Метр хаоса',        desc: 'Насколько партия опасна',         icon: '🔥', color: '#e67e22', src: 'chaos_meter/Chaos_Meter.html',       height: 250 },
-  { id: 'clock',    title: 'Часы кампании',     desc: 'День, время суток, отдых',        icon: '🌗', color: '#5b7bd5', src: 'clock/Clock.html',                   height: 760 },
+  { id: 'clock',    title: 'Время и погода',  desc: 'Часы кампании, отдых и погода',   icon: '🌗', color: '#5b7bd5', src: 'clock_weather/Clock_Weather.html',   height: 620 },
   { id: 'cubes',    title: 'Кубы',              desc: 'Броски d4–d100 и монета',         icon: '🎲', color: '#d4a017', src: 'cubes/Cubes.html',                   height: 310 },
   { id: 'ball',     title: 'Магический шар',    desc: 'Ответ на мысленный вопрос',       icon: '🔮', color: '#6a5acd', src: 'magic_ball/Magic_Ball.html',         height: 470 },
   { id: 'npc',      title: 'Генератор NPC',     desc: 'Отряд из трёх, портреты рас',     icon: '🧙', color: '#b5651d', src: 'npc_generator/NPC_Generator.html',   height: 680 },
@@ -20,7 +20,6 @@ const APPS = [
   { id: 'spells',   title: 'Книга заклинаний',  desc: 'Поиск, фильтр, иллюстрации',      icon: '📖', color: '#7a5cd6', src: 'spell_book/Spell_Book.html',         height: 700 },
   { id: 'traps',    title: 'Конструктор ловушек', desc: 'Ловушки со СЛ и уроном',        icon: '🪤', color: '#8b5a2b', src: 'traps/Traps.html',                   height: 540 },
   { id: 'vivarium', title: 'Виварий',           desc: 'Свои монстры и враги',            icon: '🦂', color: '#8e3b46', src: 'vivarium/Vivarium.html',             height: 760 },
-  { id: 'weather',  title: 'Погода',            desc: 'Погода, жара и холод',            icon: '⛅', color: '#4a90c2', src: 'weather/Weather.html',               height: 560 },
   { id: 'decks',    title: 'Колоды чудес',      desc: 'Карты Многих Вещей и другие',     icon: '🃏', color: '#d4af37', src: 'wonderful_decks/Wonderful_Decks.html', height: 640 },
   { id: 'images',   title: 'Просмотр картинок', desc: 'Галерея карт и арта',             icon: '🖼️', color: '#5a8a8a', src: 'image_viewer/Image_Viewer.html',     height: 520 }
 ];

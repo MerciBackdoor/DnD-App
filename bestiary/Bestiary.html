@@ -9,16 +9,26 @@
 <body>
 
     <div id="desktop-app">
+        <!-- Слева: поиск и сохранённые существа -->
         <aside id="sidebar">
             <div class="sidebar-header">
                 <h2>Бестиарий</h2>
                 <input type="text" id="search-input" placeholder="Поиск по имени...">
                 <ul id="results-list"></ul>
             </div>
-            
+
             <div class="saved-section-title">Сохранённые существа</div>
             <ul id="saved-list"></ul>
         </aside>
+
+        <!-- Справа: карточка выбранного существа -->
+        <main class="content-panel">
+            <div id="empty-state" class="empty-state">
+                <div class="empty-icon">🐉</div>
+                <div>Выберите существо, чтобы увидеть его карточку</div>
+            </div>
+            <div id="monster-display" class="monster-display" style="display: none;"></div>
+        </main>
     </div>
 
     <script src="database_optimized (2).js"></script>

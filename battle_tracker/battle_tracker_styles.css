@@ -207,3 +207,30 @@ input:focus { outline: none; border-color: var(--gold); }
 .insp-checkbox { border-color: var(--border); }
 .icon-btn, #controls button { color: var(--text); }
 .icon-btn:hover, #controls button:hover { color: var(--gold); }
+
+/* ===== Счётчик боя ===== */
+#round-counter {
+  position: fixed; top: 8px; right: 12px; z-index: 50;
+  display: flex; align-items: center; gap: 10px;
+  padding: 5px 8px 5px 12px;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 5px;
+  box-shadow: 0 3px 10px rgba(0,0,0,.5);
+  user-select: none;
+}
+.rc-item { display: flex; flex-direction: column; align-items: center; min-width: 56px; line-height: 1.1; }
+.rc-item + .rc-item { border-left: 1px solid var(--border); padding-left: 10px; min-width: 46px; }
+.rc-label { font-family: var(--font-display); font-size: .55rem; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); }
+.rc-value { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--gold); }
+.rc-reset {
+  width: 26px; height: 26px; padding: 0; display: flex; align-items: center; justify-content: center;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+  color: var(--text-dim); font-size: 1.05rem; line-height: 1; cursor: pointer;
+}
+.rc-reset:hover { border-color: var(--gold); color: var(--gold); }
+@media (max-width: 1000px) {
+  #round-counter { position: static; width: fit-content; margin: 0 auto 8px; }
+}
+
+/* Состояния, недоступные для ручного снятия/выбора (следствие другого состояния или иммунитет) */
+.condition-menu label.locked { opacity: .55; cursor: not-allowed; }
+.condition-menu label.locked input { cursor: not-allowed; }
