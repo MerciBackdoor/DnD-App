@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Дикая дикая магия</title>
+  <link rel="stylesheet" href="wild_magic_styles.css">
+</head>
+<body>
+
+  <div id="app" data-table="raw">
+    <!-- фон и эффекты -->
+    <div class="aura"></div>
+    <div class="flash" id="flash"></div>
+    <canvas id="sparks"></canvas>
+
+    <!-- сцена -->
+    <main class="stage" id="stage">
+      <header class="title">
+        <h1>Дикая <span>дикая</span> магия</h1>
+        <p>1000 эффектов · Pandemonium Incarnate</p>
+      </header>
+
+      <section class="reel" aria-live="polite">
+        <div class="digits" id="digits">
+          <span class="d">0</span><span class="d">0</span><span class="d">0</span>
+        </div>
+        <div class="reel-table" id="reel-table">Бросьте, чтобы узнать судьбу</div>
+      </section>
+
+      <section class="card" id="card" hidden>
+        <div class="card-top">
+          <span class="tbl" id="card-table"></span>
+          <span class="num" id="card-num"></span>
+        </div>
+        <div class="via" id="card-via" hidden></div>
+        <p class="effect" id="card-text"></p>
+        <div class="card-actions">
+          <button type="button" id="copy-btn" class="ghost">⧉ Копировать</button>
+          <button type="button" id="curse-btn" class="ghost curse" hidden>🩸 Бросить проклятие</button>
+          <span class="toast" id="toast"></span>
+        </div>
+      </section>
+
+      <div class="roll-wrap">
+        <button type="button" id="roll-btn" class="roll"><span>⚡ Бросить дикую магию</span></button>
+        <div class="pool-note" id="pool-note"></div>
+      </div>
+    </main>
+
+    <!-- боковая панель -->
+    <aside class="side">
+      <h2>Таблицы</h2>
+      <div class="chips" id="chips"></div>
+      <div class="chip-tools">
+        <button type="button" id="all-btn">Все</button>
+        <button type="button" id="nocurse-btn">Без проклятий</button>
+        <button type="button" id="onlycurse-btn">Только проклятия</button>
+      </div>
+
+      <h2>Выпало на кубах?</h2>
+      <div class="lookup">
+        <input type="number" id="lookup-input" min="0" max="999" placeholder="0–999">
+        <button type="button" id="lookup-btn">Показать</button>
+      </div>
+      <div class="hint" id="lookup-hint">Бросьте d1000 (три d10) и введите число. 0–899 — дикая магия, 900–999 — проклятия.</div>
+
+      <h2>История <button type="button" id="clear-hist" class="link">очистить</button></h2>
+      <ul id="history"></ul>
+    </aside>
+  </div>
+
+  <script src="wild_magic_data.js"></script>
+  <script src="wild_magic_scripts.js"></script>
+</body>
+</html>

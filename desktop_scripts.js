@@ -22,7 +22,9 @@ const APPS = [
   { id: 'vivarium', title: 'Виварий',           desc: 'Свои монстры и враги',            icon: '🦂', color: '#8e3b46', src: 'vivarium/Vivarium.html',             height: 760 },
   { id: 'decks',    title: 'Колоды чудес',      desc: 'Карты Многих Вещей и другие',     icon: '🃏', color: '#d4af37', src: 'wonderful_decks/Wonderful_Decks.html', height: 640 },
   { id: 'images',   title: 'Просмотр картинок', desc: 'Галерея карт и арта',             icon: '🖼️', color: '#5a8a8a', src: 'image_viewer/Image_Viewer.html',     height: 520 },
-  { id: 'manuals',  title: 'Мануалы',           desc: 'Справочные тексты: бастионы и др.', icon: '📚', color: '#a0763c', src: 'manuals/Manuals.html',               height: 700 }
+  { id: 'manuals',  title: 'Мануалы',           desc: 'Справочные тексты: бастионы и др.', icon: '📚', color: '#a0763c', src: 'manuals/Manuals.html',               height: 700 },
+  { id: 'maxhp',    title: 'Максимум здоровья', desc: 'Класс, ТЕЛ, Крепкий, среднее или кости', icon: '❤️', color: '#c0392b', src: 'max_hp/Max_HP.html',                 height: 600 },
+  { id: 'wildmagic', title: 'Дикая дикая магия', desc: '1000 эффектов дикой магии и проклятий', icon: '🌀', color: '#b44cff', src: 'wild_magic/Wild_Magic.html',     height: 700 }
 ];
 
 const Desktop = (() => {
