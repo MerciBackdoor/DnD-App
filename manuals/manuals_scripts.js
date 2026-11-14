@@ -43,6 +43,10 @@ let currentId = null;
 let hits = [];          // подсвеченные совпадения в открытом мануале
 let hitIndex = -1;
 let headings = [];      // заголовки открытого мануала (для содержания)
+let tocItems = [];      // пункты содержания (в том же порядке, что и headings)
+let activeIdx = -1;     // текущий заголовок (scrollspy)
+let activeGroup = -1;   // раскрытый раздел содержания (для больших мануалов)
+const ACCORDION_FROM = 120;   // если заголовков больше — содержание сворачивается по разделам
 
 // ---------- Вспомогательное ----------
 function readJSON(key, fallback) {
@@ -243,19 +247,42 @@ function decorate() {
   // заголовки → якоря и содержание
   headings = [...contentEl.querySelectorAll('h2, h3, h4')];
   tocList.innerHTML = '';
+  tocItems = [];
+  activeIdx = -1;
+  activeGroup = -1;
+  let group = 0;
   headings.forEach((h, i) => {
     h.id = 'mh-' + i;
+    if (h.tagName === 'H2' && i > 0) group++;
     const a = document.createElement('a');
     a.className = 'toc-item toc-' + h.tagName.toLowerCase();
-    a.textContent = h.textContent.trim();
+    // в заголовке может быть английское название и значок источника — в содержании берём короткий текст
+    a.textContent = (h.dataset.toc || h.textContent).trim();
     a.dataset.target = h.id;
+    a.dataset.group = String(group);
     a.title = a.textContent;
-    a.addEventListener('click', () => scrollToEl(h, true));
+    const g = group;
+    a.addEventListener('click', () => {
+      if (h.tagName === 'H2') setActiveGroup(g);
+      scrollToEl(h, true);
+    });
     tocList.appendChild(a);
+    tocItems.push(a);
   });
+  // большой мануал: показываем только разделы, подразделы раскрываются у текущего раздела
+  tocList.classList.toggle('accordion', headings.length > ACCORDION_FROM);
+  setActiveGroup(0);
   const has = headings.length > 0;
   $('toc').hidden = !has;
   $('toc-toggle').hidden = !has;
+}
+
+function setActiveGroup(g) {
+  if (g === activeGroup) return;
+  activeGroup = g;
+  if (!tocList.classList.contains('accordion')) return;
+  const key = String(g);
+  tocItems.forEach(a => a.classList.toggle('in-active', a.dataset.group === key));
 }
 
 function scrollToEl(el, smooth, offset = 12) {
@@ -382,22 +409,30 @@ function saveScroll() {
 }
 
 let spyQueued = false;
-function updateSpy() {
+function findActiveIndex() {
+  // заголовки идут сверху вниз, поэтому ищем последний, что уже вошёл в верх окна, двоичным поиском
   const bodyTop = readerBody.getBoundingClientRect().top;
-  let active = null;
-  for (const h of headings) {
-    if (h.getBoundingClientRect().top - bodyTop <= 60) active = h; else break;
+  let lo = 0, hi = headings.length - 1, ans = -1;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    if (headings[mid].getBoundingClientRect().top - bodyTop <= 60) { ans = mid; lo = mid + 1; } else hi = mid - 1;
   }
-  let activeEl = null;
-  tocList.querySelectorAll('.toc-item').forEach(a => {
-    const on = active && a.dataset.target === active.id;
-    a.classList.toggle('active', !!on);
-    if (on) activeEl = a;
-  });
+  return ans;
+}
+function updateSpy() {
+  if (!headings.length) return;
+  const idx = findActiveIndex();
+  if (idx === activeIdx) return;
+  if (tocItems[activeIdx]) tocItems[activeIdx].classList.remove('active');
+  activeIdx = idx;
+  const a = tocItems[idx];
+  if (!a) return;
+  a.classList.add('active');
+  setActiveGroup(Number(a.dataset.group));
   // держим активный пункт содержания в поле зрения
-  if (activeEl && !$('toc').hidden) {
-    const tb = $('toc').getBoundingClientRect(), ab = activeEl.getBoundingClientRect();
-    if (ab.top < tb.top + 30 || ab.bottom > tb.bottom - 10) activeEl.scrollIntoView({ block: 'center' });
+  if (!$('toc').hidden) {
+    const tb = $('toc').getBoundingClientRect(), ab = a.getBoundingClientRect();
+    if (ab.top < tb.top + 30 || ab.bottom > tb.bottom - 10) a.scrollIntoView({ block: 'center' });
   }
 }
 

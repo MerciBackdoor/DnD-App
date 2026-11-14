@@ -264,3 +264,69 @@ mark.current { background: var(--gold); color: var(--bg); box-shadow: 0 0 0 2px 
   #sidebar { width: 230px; }
   .reader-body { padding: 16px 16px 60px; }
 }
+
+/* ---- Большие мануалы: содержание по разделам (подразделы раскрываются у текущего раздела) ---- */
+#toc-list.accordion .toc-item:not(.toc-h2):not(.in-active) { display: none; }
+#toc-list.accordion .toc-h2 { margin-top: 2px; }
+#toc-list.accordion .toc-h2::before { content: '▸ '; color: var(--text-dim); }
+#toc-list.accordion .toc-h2.active::before { content: '▾ '; color: var(--gold); }
+
+/* ---- Элементы ширмы и справочников ---- */
+.manual-content .en {
+  font-family: var(--font-body);
+  font-size: .62em;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-dim);
+  margin-left: 4px;
+}
+.manual-content .src {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 6px;
+  padding: 1px 6px;
+  font-family: var(--font-display);
+  font-size: .5em;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(201,168,76,.4);
+  border-radius: 3px;
+}
+.manual-content .src.ext { color: #8fb0e6; border-color: rgba(143,176,230,.45); }
+.manual-content .src.hb   { color: #e08a80; border-color: rgba(224,138,128,.45); }
+
+.manual-content p.lead { font-style: italic; color: var(--text-dim); }
+.manual-content p.fn   { font-size: .92em; font-style: italic; color: var(--text-dim); }
+.manual-content p.flat {
+  font-size: .92em;
+  line-height: 1.45;
+  color: var(--text-dim);
+  padding-left: 10px;
+  border-left: 2px solid var(--border);
+  overflow-wrap: anywhere;
+}
+.manual-content .note {
+  margin-bottom: 1.4em;
+  padding: 10px 16px;
+  background: rgba(201,168,76,.05);
+  border: 1px solid rgba(201,168,76,.25);
+  border-radius: 4px;
+  font-size: .95em;
+  color: var(--text-dim);
+}
+.manual-content .note p:last-child { margin-bottom: 0; }
+.manual-content .note strong { color: var(--gold); }
+
+.manual-content table.dice td:first-child {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: .85em;
+  color: var(--gold);
+}
+.manual-content table.dice th:first-child { text-align: center; }

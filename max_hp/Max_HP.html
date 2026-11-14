@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Максимум здоровья</title>
+  <link rel="stylesheet" href="max_hp_styles.css">
+</head>
+<body>
+
+  <div class="mh-layout">
+
+    <!-- Слева: параметры персонажа -->
+    <section class="panel params">
+      <h2>Параметры</h2>
+
+      <div class="field">
+        <label for="class-select">Класс</label>
+        <select id="class-select"></select>
+      </div>
+
+      <div class="field">
+        <label for="die-input">Кость хитов</label>
+        <div class="die-row">
+          <span class="die-d">d</span>
+          <input type="number" id="die-input" min="2" max="100" value="10">
+          <span id="die-hint" class="hint"></span>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="level-input">Уровень</label>
+          <input type="number" id="level-input" min="1" max="20" value="1">
+        </div>
+        <div class="field">
+          <label for="con-input">Телосложение</label>
+          <div class="con-row">
+            <input type="number" id="con-input" min="1" max="30" value="10">
+            <span class="mod-badge" id="con-mod" title="Модификатор Телосложения">+0</span>
+          </div>
+        </div>
+      </div>
+
+      <label class="check">
+        <input type="checkbox" id="tough-check">
+        <span>Черта «Крепкий» <em>+2 ХП за каждый уровень</em></span>
+      </label>
+
+      <div class="field">
+        <label>Как считать рост здоровья</label>
+        <div class="seg" id="mode-seg">
+          <button type="button" data-mode="average" aria-pressed="true">Среднее</button>
+          <button type="button" data-mode="roll" aria-pressed="false">Бросок костей</button>
+        </div>
+        <div id="mode-hint" class="hint"></div>
+      </div>
+
+      <button type="button" id="reroll-btn" class="action" hidden>🎲 Перебросить все кости</button>
+    </section>
+
+    <!-- Справа: результат -->
+    <section class="panel result">
+      <div class="big-block">
+        <div class="big-label">Максимум хитов</div>
+        <div class="big-value" id="total-hp">0</div>
+        <div class="big-sub" id="total-sub"></div>
+      </div>
+
+      <ul class="breakdown" id="breakdown"></ul>
+      <div class="note" id="range-note"></div>
+
+      <div class="table-wrap">
+        <table id="levels-table">
+          <thead id="levels-head"></thead>
+          <tbody id="levels-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="max_hp_scripts.js"></script>
+</body>
+</html>
