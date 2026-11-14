@@ -224,21 +224,19 @@ function formatRichText(text) {
     return html.replace(/\n/g, '<br>');
 }
 
-function handleAdd(e) {
-    e.preventDefault();
-    const maxHpVal = parseInt(document.getElementById('maxHp').value) || 10;
-    const hpInput = document.getElementById('hp').value;
-    const initVal = parseInt(document.getElementById('initiative').value) || 0;
-    const acVal = parseInt(document.getElementById('ac').value) || 0;
-    const newChar = {
-        id: Date.now(),
-        name: document.getElementById('name').value,
-        ac: Math.max(0, acVal),
-        hp: hpInput === "" ? maxHpVal : parseInt(hpInput),
+// Один и тот же набор полей для бойца — из формы и из Бестиария
+let lastCombatantId = 0;
+function buildCombatant({ name, ac, hp, maxHp, initiative }) {
+    lastCombatantId = Math.max(Date.now(), lastCombatantId + 1);
+    return {
+        id: lastCombatantId,
+        name: name,
+        ac: Math.max(0, ac),
+        hp: hp,
         tempHp: 0,
-        maxHp: maxHpVal,
-        baseMaxHp: maxHpVal,
-        initiative: Math.max(-5, initVal),
+        maxHp: maxHp,
+        baseMaxHp: maxHp,
+        initiative: Math.max(-5, initiative),
         notes: "",
         isCollapsed: false,
         showNotes: false,
@@ -253,10 +251,42 @@ function handleAdd(e) {
         showExhaustMenu: false,
         reaction: true
     };
+}
+
+function handleAdd(e) {
+    e.preventDefault();
+    const maxHpVal = parseInt(document.getElementById('maxHp').value) || 10;
+    const hpInput = document.getElementById('hp').value;
+    const initVal = parseInt(document.getElementById('initiative').value) || 0;
+    const acVal = parseInt(document.getElementById('ac').value) || 0;
+    const newChar = buildCombatant({
+        name: document.getElementById('name').value,
+        ac: acVal,
+        hp: hpInput === "" ? maxHpVal : parseInt(hpInput),
+        maxHp: maxHpVal,
+        initiative: initVal
+    });
     combatants.push(newChar);
     sortAndRender();
     e.target.reset();
 }
+
+// Существо из Бестиария: имя, КД и максимум хитов из листа, инициатива всегда 0
+window.addEventListener('message', (event) => {
+    if (event.source !== window.parent) return;
+    const msg = event.data;
+    if (!msg || msg.type !== 'dnd-desktop-battle-add' || !msg.combatant) return;
+    const c = msg.combatant;
+    const maxHp = Math.max(1, parseInt(c.maxHp) || 1);
+    combatants.push(buildCombatant({
+        name: String(c.name || '').trim() || 'Существо',
+        ac: parseInt(c.ac) || 0,
+        hp: maxHp,
+        maxHp: maxHp,
+        initiative: 0
+    }));
+    sortAndRender();
+});
 
 function render() {
     const container = document.getElementById('combatants');

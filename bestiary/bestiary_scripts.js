@@ -112,6 +112,8 @@ function openMonster(item, skipSave = false) {
 
     // Готовая верстка из базы
     monsterDisplay.innerHTML = item.raw_html;
+    polishMonster(monsterDisplay);
+    addBattleButton(monsterDisplay, item);
     contentPanel.scrollTop = 0;
 
     currentUrl = item.url;
@@ -132,6 +134,108 @@ function markActive() {
     document.querySelectorAll('#saved-list .saved-item').forEach(li => {
         li.classList.toggle('active', li.dataset.url === currentUrl);
     });
+}
+
+// --- Приведение листа монстра в порядок ---
+// В базе между подписью и значением часто нет пробела или двоеточия
+// («Скорость30 футов», «оружием:+4 к попаданию», «побег.Гоблин может…»).
+// Правим только пробелы и двоеточия, буквы и цифры не меняем.
+const NO_SPACE_BEFORE = /^[\s,.;:!?)\]»”%]/;          // после такого начала пробел не нужен
+const SPACE_BEFORE    = /^[A-Za-zА-Яа-яЁё0-9+\-−–(«"“\[]/;   // а перед таким началом после «.», «:» его нужно поставить
+
+function polishMonster(root) {
+    // 1) строки параметров: «Подпись значение» → «Подпись: значение»
+    root.querySelectorAll('ul.params > li').forEach(li => {
+        if (li.classList.contains('abilities') || li.classList.contains('subsection') || li.classList.contains('size-type-alignment')) return;
+        const label = li.firstChild;
+        if (!label || label.nodeType !== 1 || label.tagName !== 'STRONG') return;
+        const rest = li.textContent.slice(label.textContent.length);
+        if (!rest.trim()) return;                                   // всё в подписи («Бонус мастерства +2») — значения нет
+        const next = label.nextSibling;
+        const colonOutside = next && next.nodeType === 3 && /^\s*:/.test(next.nodeValue);
+        if (!/[:.!?]\s*$/.test(label.textContent) && !colonOutside) label.appendChild(document.createTextNode(':'));
+    });
+
+    // 2) стык двух соседних текстовых кусков: «…оружием:» + «+4 к попаданию», «…побег.» + «Гоблин может…»
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(n => {                                            // двоеточие и точка слипшиеся с текстом внутри одного куска
+        n.nodeValue = n.nodeValue
+            .replace(/([^\s\d:]):(?=[^\s:\/])/g, '$1: ')
+            .replace(/([а-яё]{2,})\.(?=[А-ЯЁ])/g, '$1. ')
+            .replace(/([а-яё]),(?=[А-Яа-яЁё])/g, '$1, ');
+    });
+    for (let i = 0; i < nodes.length - 1; i++) {
+        const a = nodes[i], b = nodes[i + 1];
+        if (!a.nodeValue || !b.nodeValue) continue;
+        if (!/[:.;,]$/.test(a.nodeValue)) continue;                 // конец куска без пробела и со знаком препинания
+        if (/\s$/.test(a.nodeValue) || /^\s/.test(b.nodeValue)) continue;
+        if (!SPACE_BEFORE.test(b.nodeValue) || NO_SPACE_BEFORE.test(b.nodeValue)) continue;
+        a.nodeValue += ' ';
+    }
+
+    // 3) подпись, вынесенная в отдельный элемент, и значение сразу за ней («Скорость» + <strong>30 футов</strong>)
+    root.querySelectorAll('ul.params > li > strong:first-child').forEach(label => {
+        const t = label.textContent;
+        const next = label.nextSibling;
+        if (!next || /\s$/.test(t)) return;
+        const nextText = next.textContent || '';
+        if (!nextText.trim() || /^\s/.test(nextText) || NO_SPACE_BEFORE.test(nextText)) return;
+        label.after(document.createTextNode(' '));
+    });
+}
+
+// --- Кнопка «Добавить в битву» ---
+// Берёт из листа русское имя, КД и максимум хитов и отправляет их в Боевой трекер (через оболочку D&D Desktop).
+function readStat(root, labelRe) {
+    for (const li of root.querySelectorAll('ul.params > li')) {
+        const strong = li.firstChild;
+        if (!strong || strong.nodeType !== 1 || strong.tagName !== 'STRONG') continue;
+        if (!labelRe.test(strong.textContent.replace(/[:\s]+$/, ''))) continue;
+        const rest = li.textContent.slice(strong.textContent.length);
+        const m = rest.match(/\d+/);
+        if (m) return parseInt(m[0], 10);
+    }
+    return null;
+}
+
+function russianName(item) {
+    return item.name.replace(/^\[.*?\]\s*/, '').replace(/\s*\[[^\]]*\]\s*$/, '').trim();
+}
+
+function addBattleButton(root, item) {
+    const title = root.querySelector('.card-title');
+    if (!title) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'add-battle-btn';
+    btn.textContent = '⚔ Добавить в битву';
+    btn.title = 'Добавить в Боевой трекер: имя, КД и макс. хиты из листа, инициатива 0';
+    let added = 0, timer = null;
+
+    btn.addEventListener('click', () => {
+        const ac = readStat(root, /^Класс Доспеха$/i);
+        const hp = readStat(root, /^Хиты$/i);
+        const flash = (text, cls) => {
+            btn.textContent = text;
+            btn.classList.remove('ok', 'err');
+            if (cls) btn.classList.add(cls);
+            clearTimeout(timer);
+            timer = setTimeout(() => { btn.textContent = '⚔ Добавить в битву'; btn.classList.remove('ok', 'err'); }, 1800);
+        };
+        if (hp === null) { flash('Не нашёл хиты', 'err'); return; }
+        if (window.parent === window) { flash('Только в D&D Desktop', 'err'); return; }
+
+        window.parent.postMessage({
+            type: 'dnd-desktop-add-combatant',
+            combatant: { name: russianName(item), ac: ac === null ? 0 : ac, hp, maxHp: hp, initiative: 0 }
+        }, '*');
+        added++;
+        flash(added > 1 ? `✓ Добавлено (×${added})` : '✓ Добавлено', 'ok');
+    });
+    title.appendChild(btn);
 }
 
 // --- Управление сохранёнными существами ---

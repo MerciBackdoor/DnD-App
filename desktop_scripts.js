@@ -198,8 +198,11 @@ const Desktop = (() => {
     bindResize(el.querySelector('.win-grip'), meta.id);
 
     stack.appendChild(el);
-    wins.set(meta.id, { el, frame, body, meta, height });
-    return wins.get(meta.id);
+    const rec = { el, frame, body, meta, height, loaded: false, queue: [] };
+    // сообщения, отправленные окну до окончания загрузки, ждут в очереди
+    frame.addEventListener('load', () => { rec.loaded = true; rec.queue.splice(0).forEach(fn => fn()); });
+    wins.set(meta.id, rec);
+    return rec;
   }
 
   function openApp(id) {
@@ -252,8 +255,23 @@ const Desktop = (() => {
   function reload(id) {
     const w = wins.get(id);
     if (!w || !w.meta.src) return;
+    w.loaded = false;
     try { w.frame.contentWindow.location.replace(new URL(w.meta.src, location.href).href); }
     catch (e) { w.frame.src = w.meta.src; }
+  }
+
+  // Отправить сообщение приложению (оно откроется, если закрыто; прокрутки к нему не будет)
+  function sendToApp(id, message) {
+    const app = APPS.find(a => a.id === id);
+    if (!app) return false;
+    let w = wins.get(id);
+    if (!w) {
+      w = createWindow({ id: app.id, title: app.title, icon: app.icon, src: app.src, height: app.height, persist: true });
+      afterLayoutChange();
+    }
+    const post = () => { try { w.frame.contentWindow.postMessage(message, '*'); } catch (e) { /* окно недоступно */ } };
+    if (w.loaded) post(); else w.queue.push(post);
+    return true;
   }
 
   function isOwnFrame(source) {
@@ -403,5 +421,5 @@ const Desktop = (() => {
 
   document.addEventListener('DOMContentLoaded', init);
 
-  return { openApp, openDoc, close, closeAll, focusWindow, isOwnFrame };
+  return { openApp, openDoc, close, closeAll, focusWindow, isOwnFrame, sendToApp };
 })();

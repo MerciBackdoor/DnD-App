@@ -302,3 +302,34 @@ body, html {
     background: rgba(201, 168, 76, 0.05);
     padding: 10px 15px;
 }
+
+/* ---- Кнопка «Добавить в битву» справа от названия ---- */
+.monster-display .card-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+}
+.monster-display .card-title > span[data-copy] { flex: 1; min-width: 0; }
+
+.add-battle-btn {
+    margin-left: auto;
+    flex-shrink: 0;
+    padding: 7px 12px;
+    background: var(--surface);
+    color: var(--gold);
+    border: 1px solid rgba(201, 168, 76, 0.4);
+    border-radius: 4px;
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+}
+.add-battle-btn:hover { background: rgba(201, 168, 76, 0.1); border-color: var(--gold); color: #fff; }
+.add-battle-btn:active { transform: scale(0.97); }
+.add-battle-btn.ok  { color: var(--ok); border-color: rgba(46, 204, 113, 0.5); }
+.add-battle-btn.err { color: #ff8fa6; border-color: rgba(192, 57, 43, 0.6); }

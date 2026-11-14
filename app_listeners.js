@@ -233,6 +233,13 @@ const APP_HANDLERS = {
     Desktop.openDoc(DOC_BUILDERS.trapRef(msg.traps));
   },
 
+  // «Бестиарий» → «Добавить в битву»: передаём существо в Боевой трекер
+  'dnd-desktop-add-combatant': (msg) => {
+    const c = msg.combatant;
+    if (!c || !c.name) return;
+    Desktop.sendToApp('battle', { type: 'dnd-desktop-battle-add', combatant: c });
+  },
+
   // «Бестиарий» → клик по существу
   'OPEN_MONSTER_TAB': (msg) => {
     if (!msg.html) return;
