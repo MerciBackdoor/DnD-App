@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soundboard</title>
+    <link rel="stylesheet" href="soundboard_styles.css">
+</head>
+<body>
+    <div id="desktop-app">
+        <header class="top-bar">
+            <h2>Звуки</h2>
+            <div class="ctrl">
+                <label>Громкость <input id="vol" type="range" min="0" max="1" step="0.01" value="0.7"></label>
+                <button id="stop" type="button">Остановить все</button>
+            </div>
+        </header>
+        <main id="root"></main>
+    </div>
+    <script src="soundboard_scripts.js"></script>
+</body>
+</html>

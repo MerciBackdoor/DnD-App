@@ -15,7 +15,7 @@ const APPS = [
   { id: 'cubes',    title: 'Кубы',              desc: 'Броски d4–d100 и монета',         icon: '🎲', color: '#d4a017', src: 'cubes/Cubes.html',                   height: 310 },
   { id: 'ball',     title: 'Магический шар',    desc: 'Ответ на мысленный вопрос',       icon: '🔮', color: '#6a5acd', src: 'magic_ball/Magic_Ball.html',         height: 470 },
   { id: 'npc',      title: 'Генератор NPC',     desc: 'Отряд из трёх, портреты рас',     icon: '🧙', color: '#b5651d', src: 'npc_generator/NPC_Generator.html',   height: 680 },
-  { id: 'loot',     title: 'Карманная добыча',  desc: 'Безделушка и монеты',             icon: '💰', color: '#ffd700', src: 'small_loot_generator/Small_Loot_Generator.html', height: 440 },
+  { id: 'loot',     title: 'Карманная добыча',  desc: 'Безделушки и монеты',             icon: '💰', color: '#ffd700', src: 'small_loot_generator/Small_Loot_Generator.html', height: 440 },
   { id: 'notes',    title: 'Быстрые заметки',   desc: 'Стикеры на рабочий стол',         icon: '📌', color: '#f0d060', src: 'quick_notes/Quick_Notes.html',       height: 430 },
   { id: 'spells',   title: 'Книга заклинаний',  desc: 'Поиск, фильтр, иллюстрации',      icon: '📖', color: '#7a5cd6', src: 'spell_book/Spell_Book.html',         height: 700 },
   { id: 'traps',    title: 'Конструктор ловушек', desc: 'Ловушки со СЛ и уроном',        icon: '🪤', color: '#8b5a2b', src: 'traps/Traps.html',                   height: 540 },
@@ -24,7 +24,9 @@ const APPS = [
   { id: 'images',   title: 'Просмотр картинок', desc: 'Галерея карт и арта',             icon: '🖼️', color: '#5a8a8a', src: 'image_viewer/Image_Viewer.html',     height: 520 },
   { id: 'manuals',  title: 'Мануалы',           desc: 'Справочные тексты: бастионы и др.', icon: '📚', color: '#a0763c', src: 'manuals/Manuals.html',               height: 700 },
   { id: 'maxhp',    title: 'Максимум здоровья', desc: 'Класс, ТЕЛ, Крепкий, среднее или кости', icon: '❤️', color: '#c0392b', src: 'max_hp/Max_HP.html',                 height: 600 },
-  { id: 'wildmagic', title: 'Дикая дикая магия', desc: '1000 эффектов дикой магии и проклятий', icon: '🌀', color: '#b44cff', src: 'wild_magic/Wild_Magic.html',     height: 700 }
+  { id: 'wildmagic', title: 'Дикая дикая магия', desc: '1000 эффектов дикой магии и проклятий', icon: '🌀', color: '#b44cff', src: 'wild_magic/Wild_Magic.html',     height: 700 },
+  { id: 'armory',   title: 'Оружейная',         desc: 'Всё оружие и доспехи со свойствами', icon: '🗡️', color: '#8a93a6', src: 'armory/Armory.html',                 height: 700 },
+  { id: 'sounds',   title: 'Звуки',             desc: 'Дождь, двери, монстры, магия и таверна', icon: '🔊', color: '#3fa7a0', src: 'soundboard/Soundboard.html',         height: 700 }
 ];
 
 const Desktop = (() => {

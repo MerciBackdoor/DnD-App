@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оружейная</title>
+  <link rel="stylesheet" href="armory_styles.css">
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- Верхняя панель: вкладки, поиск, модификатор Ловкости -->
+    <header class="topbar">
+      <h1>Оружейная</h1>
+      <div class="tabs" id="tabs">
+        <button type="button" data-tab="weapons" class="tab">⚔ Оружие <span class="cnt" id="cnt-weapons"></span></button>
+        <button type="button" data-tab="armors" class="tab">🛡 Доспехи <span class="cnt" id="cnt-armors"></span></button>
+      </div>
+      <input type="search" id="search" placeholder="Поиск: название, свойство, источник…" autocomplete="off">
+      <label class="dex" id="dex-box" title="Модификатор Ловкости: от него зависит КД в таблице доспехов">
+        ЛОВ <input type="number" id="dex-input" min="-5" max="10" value="2">
+      </label>
+      <button type="button" id="ref-btn" class="tool" title="Справка по свойствам оружия и правилам доспехов">ℹ Справка</button>
+    </header>
+
+    <!-- Фильтры -->
+    <div class="filters" id="filters"></div>
+
+    <!-- Таблица + карточка -->
+    <div class="main">
+      <div class="table-wrap" id="table-wrap">
+        <table id="table">
+          <thead id="thead"></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+        <div class="none" id="none" hidden>Ничего не найдено. Попробуйте сбросить фильтры.</div>
+      </div>
+      <aside class="detail" id="detail"></aside>
+    </div>
+
+    <div class="statusbar" id="status"></div>
+  </div>
+
+  <script src="armory_data.js"></script>
+  <script src="armory_scripts.js"></script>
+</body>
+</html>
