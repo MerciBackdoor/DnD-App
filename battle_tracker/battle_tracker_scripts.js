@@ -350,11 +350,11 @@ function render() {
                     <button class="icon-btn remove-btn" onclick="removeCombatant(${index})">🗑️</button>
                 </div>
             </div>
+            ${c.hp <= 0 && !c.isDead ? renderDeathSaves(index, c) : ''}
             <div class="notes-area">
                 <div class="notes-view" id="view-${index}" onclick="editNotes(${index})">${formatRichText(c.notes) || '...'}</div>
                 <textarea class="notes-input" id="input-${index}" style="display:none" onblur="saveNotes(${index})">${c.notes}</textarea>
             </div>
-            ${c.hp <= 0 && !c.isDead ? renderDeathSaves(index, c) : ''}
         `;
         container.appendChild(div);
     });
@@ -371,6 +371,7 @@ window.changeHp = (index, sign) => {
             c.isDead = false;
             c.deathSaves = {success: 0, failure: 0};
         }
+        if (c.hp > 0 && c.conditions.includes("БЕССОЗНАТЕЛЬНЫЙ")) window.toggleCondition(index, "БЕССОЗНАТЕЛЬНЫЙ");
     } else {
         const damageTaken = mod;
         if (c.tempHp > 0) {
@@ -403,6 +404,7 @@ window.changeHp = (index, sign) => {
         }
         if (c.hp <= 0) c.concentration = false;
         if (damageTaken > 0 && c.concentration) addConcentrationReminder(c);
+        if (c.hp <= 0 && !c.isDead && !c.conditions.includes("БЕССОЗНАТЕЛЬНЫЙ")) window.toggleCondition(index, "БЕССОЗНАТЕЛЬНЫЙ");
     }
     sortAndRender();
 };
